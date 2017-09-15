@@ -10,7 +10,7 @@ function userManager_version():string{
 	return "17w37C2";
 }
 
-function userManager_account_create(bool $confirm, string $user, string $mdp):bool{
+function userManager_account_create(bool $confirm, string $user, string $mdp, string $email = NULL, string $nom = NULL, string $prenom = NULL, string $adresse = NULL, string $ville = NULL, string $code_postal = NULL):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($mdp == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
@@ -25,7 +25,7 @@ function userManager_account_create(bool $confirm, string $user, string $mdp):bo
 		return FALSE;
 	}
 	$mdpcrypt = fonction_hash_create($mdp);
-	mysqli_query($mysqli_connect, "INSERT INTO `".$config_mysqli_table_user."` (`id`, `user`, `pass`) VALUES (NULL, '".$user."', '".$mdpcrypt."')");
+	mysqli_query($mysqli_connect, "INSERT INTO `um_user` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '".$user."', '".$mdp."', '".$email."', '".$nom."', '".$prenom."', '".$adresse."', '".$ville."', '".$code_postal."')");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	while (TRUE){
 		mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."'");
