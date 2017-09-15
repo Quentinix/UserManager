@@ -4,13 +4,13 @@ $versionphpmini = "7.0.0";
 if (version_compare(phpversion(), $versionphpmini, "<")) trigger_error("La version PHP de votre serveur n'est pas suffisament récent, la version de PHP ".$versionphpmini." est requise, la version installée est ".phpversion().".", E_USER_ERROR);
 
 include __DIR__.'/config.inc';
-//if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR);
+//if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR); TODO: Trouver une autre protection
 
-function fonction_version():string{
-	return "17w16";
+function userManager_version():string{
+	return "17w37C1";
 }
 
-function fonction_account_create(bool $confirm, string $user, string $mdp):bool{
+function userManager_account_create(bool $confirm, string $user, string $mdp):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($mdp == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
@@ -43,7 +43,7 @@ function fonction_account_create(bool $confirm, string $user, string $mdp):bool{
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
  */
 
-function fonction_account_connect(bool $confirm, string $user, string $mdp):bool{
+function userManager_account_connect(bool $confirm, string $user, string $mdp):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($mdp == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
@@ -67,7 +67,7 @@ function fonction_account_connect(bool $confirm, string $user, string $mdp):bool
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_account_expire, $config_mysqli_table_session
  */
 
-function fonction_account_disconnect(bool $confirm):bool{
+function userManager_account_disconnect(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	session_start();
 	session_regenerate_id();
@@ -79,7 +79,7 @@ function fonction_account_disconnect(bool $confirm):bool{
  */
 
 /*
-function fonction_account_mod(bool $confirm, string $user, string $nom, string $prenom, string $email, int $cp, string $ville, string $rue, int $numero, string $complement):bool{
+function userManager_account_mod(bool $confirm, string $user, string $nom, string $prenom, string $email, int $cp, string $ville, string $rue, int $numero, string $complement):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	$verif = fonction_account_verif();
 	if ($verif[connect] == FALSE) return FALSE;
@@ -120,7 +120,7 @@ function fonction_account_mod(bool $confirm, string $user, string $nom, string $
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
  */
 
-function fonction_account_modmdp(bool $confirm, string $mdp):bool{
+function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($mdp === "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	$verif = fonction_account_verif();
@@ -139,7 +139,7 @@ function fonction_account_modmdp(bool $confirm, string $mdp):bool{
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
  */
 
-function fonction_account_verif():array{
+function userManager_account_verif():array{
 	if(isset($_COOKIE["PHPSESSID"]) == FALSE) return array("connect" => FALSE);
 	include(__DIR__."/config.inc");
 	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
@@ -181,7 +181,7 @@ function fonction_account_verif():array{
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_session
  */
 
-function fonction_account_clearsession():bool{
+function userManager_account_clearsession():bool{
 	include(__DIR__."/config.inc");
 	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -195,7 +195,7 @@ function fonction_account_clearsession():bool{
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_session
  */
 
-function fonction_accountrecup_create(bool $confirm, string $email, string $user):string{
+function userManager_accountrecup_create(bool $confirm, string $email, string $user):string{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($email == "") trigger_error("Email n'est pas renseignée.", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
@@ -218,7 +218,7 @@ function fonction_accountrecup_create(bool $confirm, string $email, string $user
 	return NULL;
 }
 
-function fonction_accountrecup_use(bool $confirm, string $token):string{
+function userManager_accountrecup_use(bool $confirm, string $token):string{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($token == "") trigger_error("Token n'est pas renseignée.", E_USER_ERROR);
 	include(__DIR__."/config.inc");
@@ -234,12 +234,12 @@ function fonction_accountrecup_use(bool $confirm, string $token):string{
 	return NULL;
 }
 
-function fonction_return_list(int $nb):string{
+function userManager_return_list(int $nb):string{
 	if ($nb === 1) return "Mauvais nom d'utilisateur ou mot de passe.";
 	return "";
 }
 
-function fonction_admin_createtoken(bool $confirm):bool{
+function userManager_admin_createtoken(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	include ("config.inc");
 	$token = md5(uniqid()).md5(uniqid());
@@ -252,7 +252,7 @@ function fonction_admin_createtoken(bool $confirm):bool{
 	return TRUE;
 }
 
-function fonction_admin_usetoken(bool $confirm):bool{
+function userManager_admin_usetoken(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	include ("config.inc");
 	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
@@ -270,7 +270,7 @@ function fonction_admin_usetoken(bool $confirm):bool{
 	return FALSE;
 }
 
-function fonction_admin_connectuser(bool $confirm, string $user):bool{ // ATTENTION: Fonction sensible : Permet une connexion d'un utilisateur sans mot de passe.
+function userManager_admin_connectuser(bool $confirm, string $user):bool{ // ATTENTION: Fonction sensible : Permet une connexion d'un utilisateur sans mot de passe.
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if (fonction_admin_usetoken(TRUE)){
@@ -286,7 +286,7 @@ function fonction_admin_connectuser(bool $confirm, string $user):bool{ // ATTENT
 	return FALSE;
 }
 
-function fonction_modassist_create(bool $confirm, string $user, bool $mod_info = FALSE, bool $mod_mdp = FALSE):int{
+function userManager_modassist_create(bool $confirm, string $user, bool $mod_info = FALSE, bool $mod_mdp = FALSE):int{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if(!$mod_info AND !$mod_mdp) trigger_error("Il faut au moins une option à modifier.", E_USER_ERROR);
@@ -309,11 +309,11 @@ function fonction_modassist_create(bool $confirm, string $user, bool $mod_info =
 	return NULL;
 }
 
-function fonction_modassist_use(bool $confirm, string $token, int $pin):bool{
+function userManager_modassist_use(bool $confirm, string $token, int $pin):bool{
 	
 }
 
-function fonction_hash_create(string $pass):string{
+function userManager_hash_create(string $pass):string{
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	$chars = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',0,1,2,3,4,5,6,7,8,9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 	$serial = '';
@@ -366,7 +366,7 @@ function fonction_hash_create(string $pass):string{
  * Variable config : $config_hash_seed
  */
 
-function fonction_hash_verif(bool $confirm, string $user, string $pass):bool{ //Permet de comparer la graine de l'utilisateur de la base de données avec une chaine de caractères.
+function userManager_hash_verif(bool $confirm, string $user, string $pass):bool{ //Permet de comparer la graine de l'utilisateur de la base de données avec une chaine de caractères.
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
@@ -409,7 +409,7 @@ function fonction_hash_verif(bool $confirm, string $user, string $pass):bool{ //
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user, $config_hash_seed
  */
 
-function fonction_create_mdp():string{
+function userManager_create_mdp():string{
 	$lettre_consonne = array("b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z");
 	$lettre_voyelle = array("a","e","i","o","u","y");
 	$lettre_special = array("&","(","-","_",")","=",",",";",":","!","$","*");
@@ -441,7 +441,7 @@ function fonction_create_mdp():string{
  * Variable config :
  */
 
-function fonction_mod_mysqlaccess_select($mod, $parametre){
+function userManager_mod_mysqlaccess_select($mod, $parametre){
 	if (!isset($parametre)) return trigger_error("La fonction doit comporter deux valeurs obligatoires.", E_USER_ERROR);
 	if (!isset($mod)) return trigger_error("La fonction doit comporter deux valeurs obligatoires.", E_USER_ERROR);
 	include(__DIR__."/config.inc");
@@ -456,7 +456,7 @@ function fonction_mod_mysqlaccess_select($mod, $parametre){
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db
  */
 
-function fonction_mod_mysqlaccess_write($mod, $parametre, $valeur){
+function userManager_mod_mysqlaccess_write($mod, $parametre, $valeur){
 	if (!isset($parametre)) return trigger_error("La fonction doit comporter trois valeurs obligatoires.", E_USER_ERROR);
 	if (!isset($valeur)) return trigger_error("La fonction doit comporter trois valeurs obligatoires.", E_USER_ERROR);
 	if (!isset($mod)) return trigger_error("La fonction doit comporter trois valeurs obligatoires.", E_USER_ERROR);
@@ -479,7 +479,7 @@ function fonction_mod_mysqlaccess_write($mod, $parametre, $valeur){
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db
  */
 
-function fonction_mod_freemobile_sendsms($user, $pass, $message){
+function userManager_mod_freemobile_sendsms($user, $pass, $message){
 	$url = "https://smsapi.free-mobile.fr/sendmsg?user=".$user."&pass=".$pass."&msg=".urlencode($message);
 	$ch = curl_init();
 	curl_setopt($ch,CURLOPT_URL, $url);
