@@ -221,7 +221,7 @@ function userManager_account_clearsession():bool{
 
 function userManager_mysqli_connect():array{
 	include "config.inc";
-	$mysqli_connect = userManager_mysqli_connect();
+	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
 	return $mysqli_connect;
 }
 /*
