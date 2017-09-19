@@ -271,6 +271,8 @@ function userManager_return_list(int $nb):string{
 	return NULL;
 }
 
+/* TODO: en attente d'une solution
+
 function userManager_admin_createtoken(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	include ("config.inc");
@@ -299,6 +301,8 @@ function userManager_admin_usetoken(bool $confirm):bool{
 	mysqli_close($mysqli_connect);
 	return FALSE;
 }
+
+*/
 
 function userManager_admin_connectuser(bool $confirm, string $user):bool{ // ATTENTION: Fonction sensible : Permet une connexion d'un utilisateur sans mot de passe.
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
