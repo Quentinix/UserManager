@@ -7,7 +7,7 @@ include __DIR__.'/config.inc';
 //if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR); TODO: Trouver une autre protection
 
 function userManager_version():string{
-	return "17w37C2";
+	return "17w38dev";
 }
 
 function userManager_account_create(bool $confirm, string $user, string $mdp, string $email = NULL, string $nom = NULL, string $prenom = NULL, string $adresse = NULL, string $ville = NULL, string $code_postal = NULL):bool{
