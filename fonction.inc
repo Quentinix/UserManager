@@ -320,6 +320,8 @@ function userManager_admin_connectuser(bool $confirm, string $user):bool{ // ATT
 	return FALSE;
 }
 
+/*
+
 function userManager_modassist_create(bool $confirm, string $user, bool $mod_info = FALSE, bool $mod_mdp = FALSE):int{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
@@ -346,6 +348,8 @@ function userManager_modassist_create(bool $confirm, string $user, bool $mod_inf
 function userManager_modassist_use(bool $confirm, string $token, int $pin):bool{
 	
 }
+
+*/
 
 function userManager_hash_create(string $pass):string{
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
