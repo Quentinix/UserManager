@@ -152,7 +152,7 @@ function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 	if($mdp === "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	$verif = fonction_account_verif();
 	if(@$verif[connect] == FALSE) return FALSE;
-	$mdpcrypt = fonction_hash_create($mdp);
+	$mdpcrypt = userManager_hash_create($mdp);
 	include(__DIR__."/config.inc");
 	$mysqli_connect = userManager_mysqli_connect();
 	mysqli_query($mysqli_connect, "UPDATE `".$config_mysqli_table_user."` SET `pass` = '".$mdpcrypt."' WHERE `id` = ".@$verif['id_utilisateur']);
