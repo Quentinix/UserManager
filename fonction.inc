@@ -268,7 +268,7 @@ function userManager_accountrecup_use(bool $confirm, string $token):string{
 
 function userManager_return_list(int $nb):string{
 	if ($nb === 1) return "Mauvais nom d'utilisateur ou mot de passe.";
-	return "";
+	return NULL;
 }
 
 function userManager_admin_createtoken(bool $confirm):bool{
