@@ -208,7 +208,7 @@ function userManager_account_verif():array{
 
 function userManager_account_clearsession():bool{
 	include(__DIR__."/config.inc");
-	$mysqli_connect- = userManager_mysqli_connect();
+	$mysqli_connect = userManager_mysqli_connect();
 	mysqli_query($mysqli_connect, "DELETE FROM `".$config_mysqli_table_session."` WHERE `expire` < ".time());
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	mysqli_close($mysqli_connect);
