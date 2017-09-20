@@ -24,7 +24,7 @@ function userManager_account_create(bool $confirm, string $user, string $mdp, st
 		mysqli_close($mysqli_connect);
 		return FALSE;
 	}
-	$mdpcrypt = fonction_hash_create($mdp);
+	$mdpcrypt = userManager_hash_create($mdp);
 	mysqli_query($mysqli_connect, "INSERT INTO `um_user` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '".$user."', '".$mdp."', '".$email."', '".$nom."', '".$prenom."', '".$adresse."', '".$ville."', '".$code_postal."')");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	while (TRUE){
@@ -219,7 +219,7 @@ function userManager_account_clearsession():bool{
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_session
  */
 
-function userManager_mysqli_connect():array{
+function userManager_mysqli_connect(){
 	include "config.inc";
 	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
 	return $mysqli_connect;
@@ -364,14 +364,27 @@ function userManager_hash_create(string $pass):string{
 	$cryptnalea = str_split(md5($serial));
 	$i = 0;
 	$j = 1;
+	var_dump($cryptnalea);
 	while($i < 32){
 		if($i >= 1){$j = $i-1;}
-		if($cryptnalea[$i] == "a"){$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];}
-		if($cryptnalea[$i] == "b"){$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];}
-		if($cryptnalea[$i] == "c"){$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];}
-		if($cryptnalea[$i] == "d"){$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];}
-		if($cryptnalea[$i] == "e"){$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];}
-		if($cryptnalea[$i] == "f"){$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];}
+		if($cryptnalea[$i] == "a"){
+			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
+		}
+		if($cryptnalea[$i] == "b"){
+			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
+		}
+		if($cryptnalea[$i] == "c"){
+			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
+		}
+		if($cryptnalea[$i] == "d"){
+			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
+		}
+		if($cryptnalea[$i] == "e"){
+			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
+		}
+		if($cryptnalea[$i] == "f"){
+			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
+		}
 		@$keyalea .= $cryptnalea[$i];
 		$i++;
 	}

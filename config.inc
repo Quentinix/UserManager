@@ -1,13 +1,13 @@
 <?php
 
-$config_mysqli_host = "quentinipbbd.mysql.db";
-$config_mysqli_user = "quentinipbbd";
-$config_mysqli_mdp = "5fbcMRR6HU5";
-$config_mysqli_db = "quentinipbbd";
+$config_mysqli_host = "localhost";
+$config_mysqli_user = "root";
+$config_mysqli_mdp = "";
+$config_mysqli_db = "usermanager_type";
 
-$config_mysqli_table_session = "MB_base_session";
-$config_mysqli_table_user = "MB_base_user";
-$config_mysqli_table_module = "MB_module";
+$config_mysqli_table_session = "um_base_session";
+$config_mysqli_table_user = "um_user";
+$config_mysqli_table_module = "um_module";
 
 $config_account_expire = 1296000; //15 jours
 $config_account_recupexpire = 600; //10 minutes
