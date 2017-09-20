@@ -10,10 +10,10 @@ function userManager_version():string{
 	return "17w38test";
 }
 
-function userManager_account_create(bool $confirm, string $user, string $mdp, string $email = NULL, string $nom = NULL, string $prenom = NULL, string $adresse = NULL, string $ville = NULL, string $code_postal = NULL):bool{
+function userManager_account_create(bool $confirm, string $user, string $pass, string $email = NULL, string $nom = NULL, string $prenom = NULL, string $adresse = NULL, string $ville = NULL, string $code_postal = NULL):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
-	if($mdp == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
+	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	include(__DIR__."/config.inc");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM ".$config_mysqli_table_user." WHERE `user` LIKE '".$user."'");
@@ -24,11 +24,11 @@ function userManager_account_create(bool $confirm, string $user, string $mdp, st
 		mysqli_close($mysqli_connect);
 		return FALSE;
 	}
-	$mdpcrypt = userManager_hash_create($mdp);
-	mysqli_query($mysqli_connect, "INSERT INTO `um_user` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '".$user."', '".$mdp."', '".$email."', '".$nom."', '".$prenom."', '".$adresse."', '".$ville."', '".$code_postal."')");
+	$pass_crypt = userManager_hash_create($pass);
+	mysqli_query($mysqli_connect, "INSERT INTO `um_user` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '".$user."', '".$pass_crypt."', '".$email."', '".$nom."', '".$prenom."', '".$adresse."', '".$ville."', '".$code_postal."')");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	while (TRUE){
-		mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."'");
+		$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."'");
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 		while ($mysqli_row = mysqli_fetch_assoc($mysqli_result)){
 			mysqli_close($mysqli_connect);
