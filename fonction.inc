@@ -42,11 +42,20 @@ function userManager_account_create(bool $confirm, string $user, string $mdp, st
  * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
  */
 
-function userManager_account_connect(bool $confirm, string $user, string $mdp):bool{
+function userManager_account_connect(bool $confirm, string $user, string $pass):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
-	if($mdp == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
-	if(fonction_hash_verif(TRUE, $user, $mdp)) {
+	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
+	$mysqli_connect = userManager_mysqli_connect();
+	$mysqli_result = mysqli_query($mysqli_connect, "SELECT user, pass FROM '" . $config_mysqli_table_user . "' LIKE '" . $user . "'");
+	$userok = FALSE;
+	while ($row = mysqli_fetch_assoc($mysqli_result)){
+		$pass_verif = $row["pass"];
+		$userok = TRUE;
+	}
+	if ($userok == FALSE)
+		return FALSE;
+	if(userManager_hash_verif(TRUE, $pass, $pass_verif)) {
 		@session_start();
 		session_regenerate_id();
 		include(__DIR__."/config.inc");
@@ -222,6 +231,7 @@ function userManager_account_clearsession():bool{
 function userManager_mysqli_connect(){
 	include "config.inc";
 	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
+	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	return $mysqli_connect;
 }
 /*
