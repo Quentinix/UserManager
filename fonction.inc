@@ -353,111 +353,60 @@ function userManager_modassist_use(bool $confirm, string $token, int $pin):bool{
 
 function userManager_hash_create(string $pass):string{
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
-	$chars = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',0,1,2,3,4,5,6,7,8,9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
-	$serial = '';
-	$max = count($chars)-1;
-	$n = mt_rand(9, 999);
-	$t = mt_rand(1, 10);
-	for($i=0;$i<$n;$i++){
-		$serial .= (!($i % $t) && $i ? '-' : '').$chars[mt_rand(0, $max)];
+	include 'config.inc';
+	$uniqseed = explode("-", $config_hash_seed);
+	$pass_hash = hash("sha256", $pass);
+	$seed = "";
+	for ($i=1; $i <= 128; $i++) 
+		$seed .= mt_rand(0, 9);
+	$pass_hash = hash("sha256", $pass_hash . $seed);
+	$pass_split = str_split($pass_hash);
+	for ($i=0; $i <= 63; $i++) { 
+		if ($pass_split[$i] == "a")
+			$pass_split[$i] = $uniqseed[0];
+		if ($pass_split[$i] == "b")
+			$pass_split[$i] = $uniqseed[1];
+		if ($pass_split[$i] == "c")
+			$pass_split[$i] = $uniqseed[2];
+		if ($pass_split[$i] == "d")
+			$pass_split[$i] = $uniqseed[3];
+		if ($pass_split[$i] == "e")
+			$pass_split[$i] = $uniqseed[4];
+		if ($pass_split[$i] == "f")
+			$pass_split[$i] = $uniqseed[5];
 	}
-	$cryptnalea = str_split(md5($serial));
-	$i = 0;
-	$j = 1;
-	var_dump($cryptnalea);
-	while($i < 32){
-		if($i >= 1){$j = $i-1;}
-		if($cryptnalea[$i] == "a"){
-			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
-		}
-		if($cryptnalea[$i] == "b"){
-			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
-		}
-		if($cryptnalea[$i] == "c"){
-			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
-		}
-		if($cryptnalea[$i] == "d"){
-			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
-		}
-		if($cryptnalea[$i] == "e"){
-			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
-		}
-		if($cryptnalea[$i] == "f"){
-			$cryptnalea[$i] = mt_rand(9999, 99999)+$cryptnalea[$j];
-		}
-		@$keyalea .= $cryptnalea[$i];
-		$i++;
-	}
-	$leng_key = strlen($keyalea);
-	$leng_keyalea = $leng_key - 32;
-	$keyalea_mod = substr($keyalea, 0, -$leng_keyalea);
-	$pass .= $keyalea_mod;
-	$cryptn = str_split(md5($pass));
-	$i = 0;
-	$j = 1;
-	include(__DIR__."/config.inc");
-	$seed = explode("-", $config_hash_seed);
-	while($i < 32){
-		if($i >= 1){$j = $i-1;}
-		if($cryptn[$i] == "a"){$cryptn[$i] = $seed[0]+$cryptn[$j];}
-		if($cryptn[$i] == "b"){$cryptn[$i] = $seed[1]+$cryptn[$j];}
-		if($cryptn[$i] == "c"){$cryptn[$i] = $seed[2]+$cryptn[$j];}
-		if($cryptn[$i] == "d"){$cryptn[$i] = $seed[3]+$cryptn[$j];}
-		if($cryptn[$i] == "e"){$cryptn[$i] = $seed[4]+$cryptn[$j];}
-		if($cryptn[$i] == "f"){$cryptn[$i] = $seed[5]+$cryptn[$j];}
-		@$key_mod .= $cryptn[$i];
-		$i++;
-	}
-	$key = $keyalea_mod;
-	$key .= $key_mod;
-	return $key;
+	$pass_hash = $seed . implode("", $pass_split);
+	return $pass_hash;
 }
-/*
- * Fonction :
- * Variable config : $config_hash_seed
- */
 
-function userManager_hash_verif(bool $confirm, string $user, string $pass):bool{ //Permet de comparer la graine de l'utilisateur de la base de données avec une chaine de caractères.
-	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
-	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
+function userManager_hash_verif(bool $confirm, string $pass, string $pass_verif){
+	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
-	include(__DIR__."/config.inc");
-	$mysqli_connect = userManager_mysqli_connect();
-	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."'");
-	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
-	while($mysqli_row = mysqli_fetch_assoc($mysqli_result)){
-		$keyalea = @$mysqli_row[pass];
-		$testuser = @$mysqli_row[user];
-		$leng_key = strlen($keyalea);
-		$leng_keyalea = $leng_key - 32;
-		$keyalea_mod = substr($keyalea, 0, -$leng_keyalea);
+	if($pass_verif == "") trigger_error("Mot de passe à vérifier n'est pas renseignée.", E_USER_ERROR);
+	include 'config.inc';
+	$uniqseed = explode("-", $config_hash_seed);
+	$pass_hash = hash("sha256", $pass);
+	$seed = substr($pass_verif, 0, 128);
+	$pass_hash = hash("sha256", $pass_hash . $seed);
+	$pass_split = str_split($pass_hash);
+	for ($i=0; $i <= 63; $i++) { 
+		if ($pass_split[$i] == "a")
+			$pass_split[$i] = $uniqseed[0];
+		if ($pass_split[$i] == "b")
+			$pass_split[$i] = $uniqseed[1];
+		if ($pass_split[$i] == "c")
+			$pass_split[$i] = $uniqseed[2];
+		if ($pass_split[$i] == "d")
+			$pass_split[$i] = $uniqseed[3];
+		if ($pass_split[$i] == "e")
+			$pass_split[$i] = $uniqseed[4];
+		if ($pass_split[$i] == "f")
+			$pass_split[$i] = $uniqseed[5];
 	}
-	$pass .= @$keyalea_mod;
-	$cryptn = str_split(md5($pass));
-	$i = 0;
-	$j = 1;
-	$seed = explode("-", $config_hash_seed);
-	while($i < 32){
-		if($i >= 1){$j = $i-1;}
-		if($cryptn[$i] == "a"){$cryptn[$i] = $seed[0]+$cryptn[$j];}
-		if($cryptn[$i] == "b"){$cryptn[$i] = $seed[1]+$cryptn[$j];}
-		if($cryptn[$i] == "c"){$cryptn[$i] = $seed[2]+$cryptn[$j];}
-		if($cryptn[$i] == "d"){$cryptn[$i] = $seed[3]+$cryptn[$j];}
-		if($cryptn[$i] == "e"){$cryptn[$i] = $seed[4]+$cryptn[$j];}
-		if($cryptn[$i] == "f"){$cryptn[$i] = $seed[5]+$cryptn[$j];}
-		@$key_mod .= $cryptn[$i];
-		$i++;
-	}
-	$key = @$keyalea_mod;
-	$key .= $key_mod;
-	mysqli_close($mysqli_connect);
-	if($key == @$keyalea)return TRUE;
-	else return FALSE;
+	$pass_hash = $seed . implode("", $pass_split);
+	if ($pass_verif === $pass_hash) return TRUE;
+	return FALSE;
 }
-/*
- * Fonction :
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user, $config_hash_seed
- */
 
 function userManager_create_mdp():string{
 	$lettre_consonne = array("b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z");
