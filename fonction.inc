@@ -97,16 +97,16 @@ function userManager_account_disconnect(bool $confirm):bool{
  * Variable config :
  */
 
-function userManager_account_mod(bool $confirm, string $user, string $nom = "", string $prenom = "", string $email = "", int $cp = 0, string $ville = "", string $adresse = ""):bool{
+function userManager_account_mod(bool $confirm, string $user = "", string $nom = "", string $prenom = "", string $email = "", string $cp = "", string $ville = "", string $adresse = ""):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
-	$verif = fonction_account_verif();
-	if ($verif[connect] == FALSE) return FALSE;
+	$verif = userManager_account_verif();
+	if ($verif["connect"] == FALSE) return FALSE;
 	$virgule = 0;
 	if($user != "") $virgule++;
 	if($nom != "") $virgule++;
 	if($prenom != "") $virgule++;
 	if($email != "") $virgule++;
-	if($cp != 0) $virgule++;
+	if($cp != "") $virgule++;
 	if($ville != "") $virgule++;
 	if($adresse != "") $virgule++;
 	if($virgule == 0) return FALSE;
@@ -117,46 +117,53 @@ function userManager_account_mod(bool $confirm, string $user, string $nom = "", 
 	if($user != ""){
 		$query .= "`user` = '".$user."'"; 
 		if ($virgule > 0) {
-			$query .= ", "; $virgule--;
+			$query .= ", ";
+			$virgule--;
 		}
 	}
 	if($nom  != ""){
 		$query .= "`nom` = '".$nom."'"; 
 		if ($virgule > 0) {
-			$query .= ", "; $virgule--;
+			$query .= ", ";
+			$virgule--;
 		}
 	}
 	if($prenom != ""){
 		$query .= "`prenom` = '".$prenom."'";
 		 if ($virgule > 0) {
-		 	$query .= ", "; $virgule--;
+		 	$query .= ", ";
+		 	$virgule--;
 		 }
 		}
 	if($email != ""){
 		$query .= "`email` = '".$email."'"; 
 		if ($virgule > 0) {
-			$query .= ", "; $virgule--;
+			$query .= ", ";
+			$virgule--;
 		}
 	}
 	if($cp != ""){
-		$query .= "`cp` = '".$cp."'";
+		$query .= "`code_postal` = '".$cp."'";
 		if ($virgule > 0) {
-			$query .= ", "; $virgule--;
+			$query .= ", ";
+			$virgule--;
 		}
 	}
 	if($ville != ""){
 		$query .= "`ville` = '".$ville."'";
 		if ($virgule > 0) {
-			$query .= ", "; $virgule--;
+			$query .= ", ";
+			$virgule--;
 		}
 	}
 	if($adresse != ""){
 		$query .= "`adresse` = '".$adresse."'";
 		if ($virgule > 0) {
-			$query .= ", "; $virgule--;
+			$query .= ", ";
+			$virgule--;
 		}
 	}
-	$query .= " WHERE `id` = '".@$verif['id_utilisateur']."'";
+	$query .= " WHERE `id` = '".$verif["id_utilisateur"]."'";
 	mysqli_query($mysqli_connect, $query);
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	mysqli_close($mysqli_connect);
