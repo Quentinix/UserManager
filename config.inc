@@ -5,7 +5,7 @@ $config_mysqli_user = "root";
 $config_mysqli_mdp = "";
 $config_mysqli_db = "usermanager_type";
 
-$config_mysqli_table_session = "um_base_session";
+$config_mysqli_table_session = "um_session";
 $config_mysqli_table_user = "um_user";
 $config_mysqli_table_module = "um_module";
 

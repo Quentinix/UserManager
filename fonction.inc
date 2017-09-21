@@ -47,10 +47,12 @@ function userManager_account_connect(bool $confirm, string $user, string $pass):
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	$mysqli_connect = userManager_mysqli_connect();
-	$mysqli_result = mysqli_query($mysqli_connect, "SELECT user, pass FROM '" . $config_mysqli_table_user . "' LIKE '" . $user . "'");
+	include(__DIR__."/config.inc");
+	$mysqli_result = mysqli_query($mysqli_connect, "SELECT user, pass FROM `" . $config_mysqli_table_user . "` WHERE `user` LIKE '" . $user . "'");
+	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	$userok = FALSE;
-	while ($row = mysqli_fetch_assoc($mysqli_result)){
-		$pass_verif = $row["pass"];
+	while ($mysqli_row = mysqli_fetch_assoc($mysqli_result)){
+		$pass_verif = $mysqli_row["pass"];
 		$userok = TRUE;
 	}
 	if ($userok == FALSE)
@@ -58,14 +60,23 @@ function userManager_account_connect(bool $confirm, string $user, string $pass):
 	if(userManager_hash_verif(TRUE, $pass, $pass_verif)) {
 		@session_start();
 		session_regenerate_id();
-		include(__DIR__."/config.inc");
 		$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 		$expire = time() + $config_account_expire;
 		mysqli_query($mysqli_connect, "INSERT INTO `".$config_mysqli_table_session."` (`id`, `user`, `session_id`, `expire`) VALUES (NULL, '".$user."', '".session_id()."', '".$expire."')");
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 		mysqli_close($mysqli_connect);
-		return TRUE;
+		while (TRUE){
+			$mysqli_connect = userManager_mysqli_connect();
+			$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_session."` WHERE `user` LIKE '".$user."'");
+			if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
+			while ($mysqli_row = mysqli_fetch_assoc($mysqli_result)){
+				mysqli_close($mysqli_connect);
+				return TRUE;
+			}
+			sleep(1);
+			// TODO: sécurité anti time out
+		}
 	}else{
 		return FALSE;
 	}
