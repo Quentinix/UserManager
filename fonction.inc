@@ -196,37 +196,25 @@ function userManager_account_verif():array{
 	if(isset($_COOKIE["PHPSESSID"]) == FALSE) return array("connect" => FALSE);
 	include(__DIR__."/config.inc");
 	$mysqli_connect = userManager_mysqli_connect();
-	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM ".$config_mysqli_table_session." WHERE `session_id` LIKE '".$_COOKIE["PHPSESSID"]."'");
+	$mysqli_result = mysqli_query($mysqli_connect, "SELECT " . $config_mysqli_table_session . ".user, session_id, expire, email, nom, prenom, adresse, ville, code_postal  FROM `" . $config_mysqli_table_session . "`, `" . $config_mysqli_table_user . "` WHERE `session_id` LIKE '" . $_COOKIE["PHPSESSID"] . "'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
-	$confirmation = 0;
 	while($mysqli_row=mysqli_fetch_assoc($mysqli_result)){
 		if(@$mysqli_row[expire] > time()){
-			$confirmation = 1;
-			$user = @$mysqli_row[user];
-			$expire = @$mysqli_row[expire];
-			$session_mysql = @$mysqli_row[session_id];
+			return array(
+						"connect" => TRUE,
+						"user" => $mysqli_row["user"],
+						"session_id" => $mysqli_row["session_id"],
+						"expire" => $mysqli_row["expire"],
+						"email" => $mysqli_row["email"],
+						"nom" => $mysqli_row["nom"],
+						"prenom" => $mysqli_row["prenom"],
+						"adresse" => $mysqli_row["adresse"],
+						"ville" => $mysqli_row["ville"],
+						"code_postal" => $mysqli_row["code_postal"], 
+			);
 		}
 	}
-	if($confirmation == 0){
-		$return = array(
-				"connect" => FALSE,
-		);
-		mysqli_close($mysqli_connect);
-		return $return;
-	}
-	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM ".$config_mysqli_table_user." WHERE `user` LIKE '".$user."'");
-	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
-	while($mysqli_row=mysqli_fetch_assoc($mysqli_result)){
-		$return = array(
-				"connect" => TRUE,
-				"session_mysql" => $session_mysql,
-				"id_utilisateur" => @$mysqli_row['id'],
-				"session_expire" => $expire,
-				"user" => @$mysqli_row['user'],
-		);
-	}
-	mysqli_close($mysqli_connect);
-	return $return;
+	return  array("connect" => FALSE);
 }
 /*
  * Fonction :
