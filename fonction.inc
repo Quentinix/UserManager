@@ -177,7 +177,7 @@ function userManager_account_mod(bool $confirm, string $user = "", string $nom =
 function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($mdp === "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
-	$verif = fonction_account_verif();
+	$verif = userManager_account_verif();
 	if(@$verif[connect] == FALSE) return FALSE;
 	$mdpcrypt = userManager_hash_create($mdp);
 	include(__DIR__."/config.inc");
