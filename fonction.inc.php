@@ -3,7 +3,7 @@
 $versionphpmini = "7.0.0";
 if (version_compare(phpversion(), $versionphpmini, "<")) trigger_error("La version PHP de votre serveur n'est pas suffisament récent, la version de PHP ".$versionphpmini." est requise, la version installée est ".phpversion().".", E_USER_ERROR);
 
-include __DIR__.'/config.inc';
+include __DIR__.'/config.inc.php';
 //if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR); TODO: Trouver une autre protection
 
 function userManager_version():string{
@@ -14,7 +14,7 @@ function userManager_account_create(bool $confirm, string $user, string $pass, s
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM ".$config_mysqli_table_user." WHERE `user` LIKE '".$user."'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -47,7 +47,7 @@ function userManager_account_connect(bool $confirm, string $user, string $pass):
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	$mysqli_connect = userManager_mysqli_connect();
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT user, pass FROM `" . $config_mysqli_table_user . "` WHERE `user` LIKE '" . $user . "'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	$userok = FALSE;
@@ -111,7 +111,7 @@ function userManager_account_mod(bool $confirm, string $user = "", string $nom =
 	if($adresse != "") $virgule++;
 	if($virgule == 0) return FALSE;
 	$virgule--;
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$query = "UPDATE `".$config_mysqli_table_user."` SET ";
 	if($user != ""){
@@ -180,7 +180,7 @@ function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 	$verif = userManager_account_verif();
 	if(@$verif[connect] == FALSE) return FALSE;
 	$mdpcrypt = userManager_hash_create($mdp);
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	mysqli_query($mysqli_connect, "UPDATE `".$config_mysqli_table_user."` SET `pass` = '".$mdpcrypt."' WHERE `id` = ".@$verif['id_utilisateur']);
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -194,7 +194,7 @@ function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 
 function userManager_account_verif():array{
 	if(isset($_COOKIE["PHPSESSID"]) == FALSE) return array("connect" => FALSE);
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT " . $config_mysqli_table_session . ".user, session_id, expire, email, nom, prenom, adresse, ville, code_postal  FROM `" . $config_mysqli_table_session . "`, `" . $config_mysqli_table_user . "` WHERE `session_id` LIKE '" . $_COOKIE["PHPSESSID"] . "'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -222,7 +222,7 @@ function userManager_account_verif():array{
  */
 
 function userManager_account_clearsession():bool{
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	mysqli_query($mysqli_connect, "DELETE FROM `".$config_mysqli_table_session."` WHERE `expire` < ".time());
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -235,7 +235,7 @@ function userManager_account_clearsession():bool{
  */
 
 function userManager_mysqli_connect(){
-	include "config.inc";
+	include "config.inc.php";
 	$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	return $mysqli_connect;
@@ -249,7 +249,7 @@ function userManager_accountrecup_create(bool $confirm, string $email, string $u
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($email == "") trigger_error("Email n'est pas renseignée.", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."' AND `email` LIKE '".$email."'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -270,7 +270,7 @@ function userManager_accountrecup_create(bool $confirm, string $email, string $u
 function userManager_accountrecup_use(bool $confirm, string $token):string{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($token == "") trigger_error("Token n'est pas renseignée.", E_USER_ERROR);
-	include(__DIR__."/config.inc");
+	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_recupcompte."` WHERE `token` LIKE '".$token."'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -291,7 +291,7 @@ function userManager_return_list(int $nb):string{
 
 function userManager_admin_createtoken(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
-	include ("config.inc");
+	include ("config.inc.php");
 	$token = md5(uniqid()).md5(uniqid());
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "INSERT INTO `".$config_mysqli_table_adminaccess."` (`id`, `token`, `ip`) VALUES (NULL, '".$token."', '".@$_SERVER[REMOTE_ADDR]."')");
@@ -303,7 +303,7 @@ function userManager_admin_createtoken(bool $confirm):bool{
 
 function userManager_admin_usetoken(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
-	include ("config.inc");
+	include ("config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_adminaccess."` WHERE `token` LIKE '".@$_COOKIE[admintoken]."'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($m1ysqli_connect), E_USER_ERROR);
@@ -324,7 +324,7 @@ function userManager_admin_connectuser(bool $confirm, string $user):bool{ // ATT
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if (fonction_admin_usetoken(TRUE)){
-		include ("config.inc");
+		include ("config.inc.php");
 		$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 		$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."'");
@@ -342,7 +342,7 @@ function userManager_modassist_create(bool $confirm, string $user, bool $mod_inf
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if(!$mod_info AND !$mod_mdp) trigger_error("Il faut au moins une option à modifier.", E_USER_ERROR);
-	include ("config.inc");
+	include ("config.inc.php");
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `$config_mysqli_table_user` WHERE `user` LIKE '".$user."'");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	$exist = FALSE;
@@ -369,7 +369,7 @@ function userManager_modassist_use(bool $confirm, string $token, int $pin):bool{
 
 function userManager_hash_create(string $pass):string{
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
-	include 'config.inc';
+	include 'config.inc.php';
 	$uniqseed = explode("-", $config_hash_seed);
 	$pass_hash = hash("sha256", $pass);
 	$seed = "";
@@ -399,7 +399,7 @@ function userManager_hash_verif(bool $confirm, string $pass, string $pass_verif)
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 	if($pass_verif == "") trigger_error("Mot de passe à vérifier n'est pas renseignée.", E_USER_ERROR);
-	include 'config.inc';
+	include 'config.inc.php';
 	$uniqseed = explode("-", $config_hash_seed);
 	$pass_hash = hash("sha256", $pass);
 	$seed = substr($pass_verif, 0, 128);
