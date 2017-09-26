@@ -8,6 +8,7 @@ $config_mysqli_db = "usermanager_type";
 $config_mysqli_table_session = "um_session";
 $config_mysqli_table_user = "um_user";
 $config_mysqli_table_module = "um_module";
+$config_mysqli_table_adminaccess = "um_adminaccess";
 
 $config_account_expire = 1296000; //15 jours
 $config_account_recupexpire = 600; //10 minutes

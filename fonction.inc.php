@@ -287,12 +287,10 @@ function userManager_return_list(int $nb):string{
 	return NULL;
 }
 
-/* TODO: en attente d'une solution
-
 function userManager_admin_createtoken(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	include ("config.inc.php");
-	$token = md5(uniqid()).md5(uniqid());
+	$token = userManager_hash_create(uniqid());
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "INSERT INTO `".$config_mysqli_table_adminaccess."` (`id`, `token`, `ip`) VALUES (NULL, '".$token."', '".@$_SERVER[REMOTE_ADDR]."')");
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
@@ -306,10 +304,10 @@ function userManager_admin_usetoken(bool $confirm):bool{
 	include ("config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_adminaccess."` WHERE `token` LIKE '".@$_COOKIE[admintoken]."'");
-	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($m1ysqli_connect), E_USER_ERROR);
+	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	while ($mysqli_row = mysqli_fetch_assoc($mysqli_result)){
 		if (@$_SERVER['REMOTE_ADDR'] == @$mysqli_row[ip]) {
-			setcookie("admintoken", NULL);
+			setcookie("admintoken", NULL, time() - 1);
 			mysqli_close($mysqli_connect);
 			return TRUE;
 		}
@@ -318,14 +316,12 @@ function userManager_admin_usetoken(bool $confirm):bool{
 	return FALSE;
 }
 
-*/
-
 function userManager_admin_connectuser(bool $confirm, string $user):bool{ // ATTENTION: Fonction sensible : Permet une connexion d'un utilisateur sans mot de passe.
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if (fonction_admin_usetoken(TRUE)){
 		include ("config.inc.php");
-		$mysqli_connect = mysqli_connect($config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db);
+		$mysqli_connect = userManager_mysqli_connect();
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 		$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM `".$config_mysqli_table_user."` WHERE `user` LIKE '".$user."'");
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
