@@ -42,12 +42,8 @@ function userManager_account_create(bool $confirm, string $user, string $pass, s
 		sleep(1);
 		if (ini_get("max_execution_time") > time() - $exe_time_begin - 2)
 				return FALSE;
-		// TODO : securité anti time out.
 	}
 }
-/* Fonction : fonction_hash_create
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
- */
 
 function userManager_account_connect(bool $confirm, string $user, string $pass):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
@@ -85,16 +81,11 @@ function userManager_account_connect(bool $confirm, string $user, string $pass):
 			sleep(1);
 			if (ini_get("max_execution_time") > time() - $exe_time_begin - 2)
 				return FALSE;
-			// TODO: sécurité anti time out
 		}
 	}else{
 		return FALSE;
 	}
 }
-/* 
- * Fonction : fonction_hash_verif, fonction_account_verif
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_account_expire, $config_mysqli_table_session
- */
 
 function userManager_account_disconnect(bool $confirm):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
@@ -102,10 +93,6 @@ function userManager_account_disconnect(bool $confirm):bool{
 	session_regenerate_id();
 	return TRUE;
 }
-/*
- * Fonction :
- * Variable config :
- */
 
 function userManager_account_mod(bool $confirm, string $user = "", string $nom = "", string $prenom = "", string $email = "", string $cp = "", string $ville = "", string $adresse = ""):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
@@ -179,10 +166,6 @@ function userManager_account_mod(bool $confirm, string $user = "", string $nom =
 	mysqli_close($mysqli_connect);
 	return TRUE;
 }
-/*
- * Fonction : fonction_account_verif
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
- */
 
 function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
@@ -197,10 +180,6 @@ function userManager_account_modmdp(bool $confirm, string $mdp):bool{
 	mysqli_close($mysqli_connect);
 	return TRUE;
 }
-/*
- * Fonction : fonction_account_verif, fonction_hash_create
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_user
- */
 
 function userManager_account_verif():array{
 	if(isset($_COOKIE["PHPSESSID"]) == FALSE) return array("connect" => FALSE);
@@ -226,10 +205,6 @@ function userManager_account_verif():array{
 	}
 	return  array("connect" => FALSE);
 }
-/*
- * Fonction :
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_session
- */
 
 function userManager_account_clearsession():bool{
 	include(__DIR__."/config.inc.php");
@@ -239,10 +214,6 @@ function userManager_account_clearsession():bool{
 	mysqli_close($mysqli_connect);
 	return TRUE;
 }
-/*
- * Fonction :
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db, $config_mysqli_table_session
- */
 
 function userManager_mysqli_connect(){
 	include "config.inc.php";
@@ -250,10 +221,6 @@ function userManager_mysqli_connect(){
 	if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 	return $mysqli_connect;
 }
-/*
- * Fonction :
- * Variable config : $config_mysqli_host, $config_mysqli_user, $config_mysqli_mdp, $config_mysqli_db
- */
 
 function userManager_accountrecup_create(bool $confirm, string $email, string $user):string{
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
@@ -457,9 +424,5 @@ function userManager_create_mdp():string{
 	}
 	return $return;
 }
-/*
- * Fonction :
- * Variable config :
- */
 
 ?>
