@@ -1,7 +1,8 @@
 <?php
 
 $versionphpmini = "7.0.0";
-if (version_compare(phpversion(), $versionphpmini, "<")) trigger_error("La version PHP de votre serveur n'est pas suffisament récent, la version de PHP ".$versionphpmini." est requise, la version installée est ".phpversion().".", E_USER_ERROR);
+if (version_compare(phpversion(), $versionphpmini, "<"))
+	trigger_error("La version PHP de votre serveur n'est pas suffisament récent, la version de PHP ".$versionphpmini." est requise, la version installée est ".phpversion().".", E_USER_ERROR);
 
 include __DIR__.'/config.inc.php';
 //if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR); TODO: Trouver une autre protection
@@ -11,9 +12,13 @@ function userManager_version():string{
 }
 
 function userManager_account_create(bool $confirm, string $user, string $pass, string $email = NULL, string $nom = NULL, string $prenom = NULL, string $adresse = NULL, string $ville = NULL, string $code_postal = NULL):bool{
-	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
-	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
-	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
+	if($confirm != TRUE)
+		trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
+	if($user == "")
+		trigger_error("User n'est pas renseignée.", E_USER_ERROR);
+	if($pass == "")
+		trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
+	$exe_time_begin = time();
 	include(__DIR__."/config.inc.php");
 	$mysqli_connect = userManager_mysqli_connect();
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM ".$config_mysqli_table_user." WHERE `user` LIKE '".$user."'");
@@ -35,6 +40,8 @@ function userManager_account_create(bool $confirm, string $user, string $pass, s
 			return TRUE;
 		}
 		sleep(1);
+		if (ini_get("max_execution_time") > time() - $exe_time_begin - 2)
+				return FALSE;
 		// TODO : securité anti time out.
 	}
 }
@@ -46,6 +53,7 @@ function userManager_account_connect(bool $confirm, string $user, string $pass):
 	if($confirm != TRUE) trigger_error("Il faut confirmer la fonction", E_USER_ERROR);
 	if($user == "") trigger_error("User n'est pas renseignée.", E_USER_ERROR);
 	if($pass == "") trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
+	$exe_time_begin = time();
 	$mysqli_connect = userManager_mysqli_connect();
 	include(__DIR__."/config.inc.php");
 	$mysqli_result = mysqli_query($mysqli_connect, "SELECT user, pass FROM `" . $config_mysqli_table_user . "` WHERE `user` LIKE '" . $user . "'");
@@ -75,6 +83,8 @@ function userManager_account_connect(bool $confirm, string $user, string $pass):
 				return TRUE;
 			}
 			sleep(1);
+			if (ini_get("max_execution_time") > time() - $exe_time_begin - 2)
+				return FALSE;
 			// TODO: sécurité anti time out
 		}
 	}else{
