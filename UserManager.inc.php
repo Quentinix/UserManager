@@ -49,7 +49,7 @@ class UserManager
 			}
 			sleep(1);
 			if (ini_get("max_execution_time") > time() - $exe_time_begin - 2)
-					return FALSE;
+				return FALSE;
 		}
 	}
 
