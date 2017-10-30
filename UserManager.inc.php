@@ -5,15 +5,17 @@ if (version_compare(phpversion(), $versionphpmini, "<"))
 	trigger_error("La version PHP de votre serveur n'est pas suffisament récent, la version de PHP ".$versionphpmini." est requise, la version installée est ".phpversion().".", E_USER_ERROR);
 
 include __DIR__.'/UserManagerConfig.inc.php';
-//if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR); TODO: Trouver une autre protection
+if(!array_search(@$_SERVER['HTTP_HOST'], $config_safety_domainename)) trigger_error("Domaine refusé !", E_USER_ERROR);
 
 class UserManager
 {	
-	/*
-	function __construct(argument){
-		# code...
+	var $sql_connect;
+	var $sql_table;
+	function __construct(){
+		require_once 'UserManagerConfig.inc.php';
+		$this->sql_connect = mysqli_connect($config_sql_host, $config_sql_user, $config_sql_pass, $config_sql_db);
+		$this->sql_table = $config_sql_table;
 	}
-	*/
 
 	function version():string{
 		return "17w38test";
@@ -27,12 +29,12 @@ class UserManager
 		if($pass == "")
 			trigger_error("Mot de passe n'est pas renseignée.", E_USER_ERROR);
 		$exe_time_begin = time();
-		include(__DIR__."/UserManagerConfig.inc.php");
+		include "UserManagerConfig.inc.php";
 		$mysqli_connect = mysqli_connect();
 		$mysqli_result = mysqli_query($mysqli_connect, "SELECT * FROM ".$config_mysqli_table_user." WHERE `user` LIKE '".$user."'");
 		if(mysqli_errno($mysqli_connect)) trigger_error("Echec requête MySQL : ".mysqli_errno($mysqli_connect)." : ".mysqli_error($mysqli_connect), E_USER_ERROR);
 		$existe = 0;
-		while($mysqli_row=mysqli_fetch_array($mysqli_result)) $existe = 1;
+		while($mysqli_row = mysqli_fetch_array($mysqli_result)) $existe = 1;
 		if($existe == 1){
 			mysqli_close($mysqli_connect);
 			return FALSE;

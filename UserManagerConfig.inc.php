@@ -1,14 +1,16 @@
 <?php
 
-$config_mysqli_host = "localhost";
-$config_mysqli_user = "root";
-$config_mysqli_mdp = "";
-$config_mysqli_db = "usermanager_type";
+$config_sql_host = "localhost";
+$config_sql_user = "root";
+$config_sql_pass = "";
+$config_sql_db = "usermanager_type";
 
-$config_mysqli_table_session = "um_session";
-$config_mysqli_table_user = "um_user";
-$config_mysqli_table_module = "um_module";
-$config_mysqli_table_adminaccess = "um_adminaccess";
+$config_sql_table = array (
+	"session"		=> "um_session",
+	"user"			=> "um_user",
+	"module"		=> "um_module",
+	"adminaccess"	=> "um_adminaccess",
+);
 
 $config_account_expire = 1296000; //15 jours
 $config_account_recupexpire = 600; //10 minutes
