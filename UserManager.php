@@ -1,17 +1,16 @@
 <?php
-namespace UserManager;
 
-use Exception;
+use UserManager\SqlConfig;
 
-require 'UserManager/Config.php';
+require 'UserManager/SqlConfig.php';
 
-class UserManager {
+class UserManager extends SqlConfig{
 	private $sqlConfig;
 	private $sqlConnect;
 	
 	function __construct() {
-		$this->sqlConfig = new Config();
-		$this->sqlConnect = mysqli_connect(Config::nameHost(), Config::nameUser(), Config::namePass(), Config::nameDb());
+		//$this->sqlConfig = new Config();
+		$this->sqlConnect = mysqli_connect($this->getHost(), $this->getUser(), $this->getPass(), $this->getDb());
 	}
 	
 	function __destruct() {
@@ -28,17 +27,17 @@ class UserManager {
 		if($pass == "")
 			throw new Exception("Pass n'est pas renseignée.");
 		$exeTimeBegin = time();
-		$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . Config::tablenameUser() . " WHERE `user` LIKE '".$user."'");
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getTableUser() . " WHERE `user` LIKE '".$user."'");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : ".mysqli_errno($this->sqlConnect)." : ".mysqli_error($this->sqlConnect));
 		if (mysqli_fetch_array($sqlResult) != NULL)
 			return false;
 		$passCrypt = $this->hashCrypt($pass);
-		mysqli_query($this->sqlConnect, "INSERT INTO `" . Config::tablenameUser() . "` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '".$user."', '".$pass_crypt."', '".$email."', '".$nom."', '".$prenom."', '".$adresse."', '".$ville."', '".$code_postal."')");
+		mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getTableUser() . "` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '".$user."', '".$pass_crypt."', '".$email."', '".$nom."', '".$prenom."', '".$adresse."', '".$ville."', '".$code_postal."')");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : ".mysqli_errno($this->sqlConnect)." : ".mysqli_error($this->sqlConnect));
 		while (true) {
-			$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . Config::tablenameUser() . "` WHERE `user` LIKE '".$user."'");
+			$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getTableUser() . "` WHERE `user` LIKE '".$user."'");
 			if (mysqli_errno($this->sqlConnect))
 				throw new Exception("Echec requête SQL : ".mysqli_errno($this->sqlConnect)." : ".mysqli_error($this->sqlConnect));
 			if (mysqli_fetch_array($sqlResult) != NULL)

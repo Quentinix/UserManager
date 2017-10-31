@@ -1,7 +1,7 @@
 <?php
 namespace UserManager;
 
-class Config
+class SqlConfig
 {
 	private static $configSqlHost = "localhost";
 	private static $configSqlUser = "root";
@@ -9,19 +9,19 @@ class Config
 	private static $configSqlDb = "usermanager_dev";
 	private static $configSqlTableUser = "um_user";
 	
-	static function nameHost() {
+	static function getHost() {
 		return self::$configSqlHost;
 	}
-	static function nameUser() {
+	static function getUser() {
 		return self::$configSqlUser;
 	}
-	static function namePass() {
+	static function getPass() {
 		return self::$configSqlPass;
 	}
-	static function nameDb() {
+	static function getDb() {
 		return self::$configSqlDb;
 	}
-	static function tablenameUser() {
+	static function getTableUser() {
 		return self::$configSqlTableUser;
 	}
 
