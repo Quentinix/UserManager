@@ -1,29 +1,45 @@
 <?php
+
 namespace UserManager;
 
-class SqlConfig
-{
-	private static $configSqlHost = "localhost";
-	private static $configSqlUser = "root";
-	private static $configSqlPass = "";
-	private static $configSqlDb = "usermanager_dev";
-	private static $configSqlTableUser = "um_user";
+class SqlConfig {
 	
-	static function getHost() {
-		return self::$configSqlHost;
+	private $configSqlHost = "localhost";
+	private $configSqlUser = "root";
+	private $configSqlPass = "";
+	private $configSqlDb = "usermanager_dev";
+	private $configSqlTableUser = "um_user";
+	private $configSqlTableSession = "um_session";
+	private $configSessionExpire = 86400;
+
+	public function getConfigSqlHost() {
+		return $this->configSqlHost;
 	}
-	static function getUser() {
-		return self::$configSqlUser;
+
+	public function getConfigSqlUser() {
+		return $this->configSqlUser;
 	}
-	static function getPass() {
-		return self::$configSqlPass;
+
+	public function getConfigSqlPass() {
+		return $this->configSqlPass;
 	}
-	static function getDb() {
-		return self::$configSqlDb;
+
+	public function getConfigSqlDb() {
+		return $this->configSqlDb;
 	}
-	static function getTableUser() {
-		return self::$configSqlTableUser;
+
+	public function getConfigSqlTableUser() {
+		return $this->configSqlTableUser;
+	}
+
+	public function getConfigSqlTableSession() {
+		return $this->configSqlTableSession;
+	}
+
+	public function getConfigSessionExpire() {
+		return $this->configSessionExpire;
 	}
 
 }
 
+?>
