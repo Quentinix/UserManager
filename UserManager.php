@@ -5,7 +5,6 @@ require 'UserManager/SqlConfig.php';
 class UserManager extends SqlConfig {
 	
 	private $sqlConfig;
-	
 	private $sqlConnect;
 
 	function __construct() {
