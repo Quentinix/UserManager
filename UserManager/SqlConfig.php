@@ -10,7 +10,10 @@ class SqlConfig {
 	private $configSqlDb = "usermanager_dev";
 	private $configSqlTableUser = "um_user";
 	private $configSqlTableSession = "um_session";
+	private $configSqlTableRecovery = "um_recovery";
 	private $configSessionExpire = 86400;
+	private $configRecoveryExpire = 900;
+	private $configSeed = "42068-40216-50795-54075-53207-42985";
 
 	public function getConfigSqlHost() {
 		return $this->configSqlHost;
@@ -38,6 +41,18 @@ class SqlConfig {
 
 	public function getConfigSessionExpire() {
 		return $this->configSessionExpire;
+	}
+
+	public function getConfigRecoveryExpire() {
+		return $this->configRecoveryExpire;
+	}
+
+	public function getConfigSqlTableRecovery() {
+		return $this->configSqlTableRecovery;
+	}
+
+	public function getConfigSeed() {
+		return $this->configSeed;
 	}
 
 }

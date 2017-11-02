@@ -169,7 +169,7 @@ class UserManager extends SqlConfig {
 		return true;
 	}
 
-	function accountModMdp(string $mdp) {
+	function accountModMdp($mdp) {
 		$verif = accountVerif();
 		if ($verif["connect"] == FALSE)
 			return FALSE;
@@ -211,6 +211,165 @@ class UserManager extends SqlConfig {
 		return true;
 	}
 
+	function accountRecoveryCreate($email, $user) {
+		if ($email == "")
+			throw new Exception("Email n'est pas renseignée.");
+		if ($user == "")
+			throw new Exception("User n'est pas renseignée.");
+		$sqlResult = mysqli_query($this->sql_connect, "SELECT * FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "' AND `email` LIKE '" . $email . "'");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		if (mysqli_fetch_array($sqlResult) != NULL) {
+			$uniqid = md5(uniqid()) . md5(uniqid());
+			$expire = time() + $this->getConfigRecoveryExpire();
+			mysqli_query($this->sql_connect, "INSERT INTO `" . $this->getConfigSqlTableRecovery() . "` (`id`, `token`, `user`, `expire`) VALUES (NULL, '" . $uniqid . "', '" . $user . "', '" . $expire . "')");
+			if (mysqli_errno($this->sqlConnect))
+				throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+			return $uniqid;
+		} else {
+			return NULL;
+		}
+	}
+
+	function accountRecoveryUse($token) {
+		if ($token == "")
+			throw new Exception("Token n'est pas renseignée.");
+		$sqlResult = mysqli_query($this->sql_connect, "SELECT * FROM `" . $this->getConfigSqlTableRecovery() . "` WHERE `token` LIKE '" . $token . "'");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		if ($sqlRow = mysqli_fetch_array($sqlResult) != NULL)
+			return $sqlRow["user"];
+		else
+			return NULL;
+	}
+
+	function hashCreate($mdp) {
+		if ($mdp == "")
+			throw new Exception("Mdp n'est pas renseignée.");
+		$seed = explode("-", $this->getConfigSeed());
+		$mdpHash = hash("sha256", $mdp);
+		$seedRand = "";
+		for ($i = 1; $i <= 128; $i++)
+			$seedRand .= mt_rand(0, 9);
+		$mdpHash = hash("sha256", $mdpHash . $seedRand);
+		$mdpSplit = str_split($mdpHash);
+		for ($i = 0; $i <= 63; $i++) {
+			if ($mdpSplit[$i] == "a")
+				$mdpSplit[$i] = $seed[0];
+			if ($mdpSplit[$i] == "b")
+				$mdpSplit[$i] = $seed[1];
+			if ($mdpSplit[$i] == "c")
+				$mdpSplit[$i] = $seed[2];
+			if ($mdpSplit[$i] == "d")
+				$mdpSplit[$i] = $seed[3];
+			if ($mdpSplit[$i] == "e")
+				$mdpSplit[$i] = $seed[4];
+			if ($mdpSplit[$i] == "f")
+				$mdpSplit[$i] = $seed[5];
+		}
+		$mdpHash = $seed . implode("", $mdpSplit);
+		return $mdpHash;
+	}
+
+	function hashVerif($mdp, $mdpVerif) {
+		if ($mdp == "")
+			throw new Exception("Mdp n'est pas renseignée.");
+		if ($mdpVerif == "")
+			throw new Exception("MdpVerif n'est pas renseignée.");
+		$seed = explode("-", $this->getConfigSeed());
+		$mdpHash = hash("sha256", $mdp);
+		$seedRand = substr($mdpVerif, 0, 128);
+		$mdpHash = hash("sha256", $mdpHash . $seedRand);
+		$mdpSplit = str_split($mdpHash);
+		for ($i = 0; $i <= 63; $i++) {
+			if ($mdpSplit[$i] == "a")
+				$mdpSplit[$i] = $seed[0];
+			if ($mdpSplit[$i] == "b")
+				$mdpSplit[$i] = $seed[1];
+			if ($mdpSplit[$i] == "c")
+				$mdpSplit[$i] = $seed[2];
+			if ($mdpSplit[$i] == "d")
+				$mdpSplit[$i] = $seed[3];
+			if ($mdpSplit[$i] == "e")
+				$mdpSplit[$i] = $seed[4];
+			if ($mdpSplit[$i] == "f")
+				$mdpSplit[$i] = $seed[5];
+		}
+		$mdpHash = $seed . implode("", $mdpSplit);
+		if ($mdpVerif === $mdpHash)
+			return true;
+		else
+			return false;
+	}
+
+	function createMdp() {
+		$lettreConsonne = array(
+			"b",
+			"c",
+			"d",
+			"f",
+			"g",
+			"h",
+			"j",
+			"k",
+			"l",
+			"m",
+			"n",
+			"p",
+			"q",
+			"r",
+			"s",
+			"t",
+			"v",
+			"w",
+			"x",
+			"z"
+		);
+		$lettreVoyelle = array(
+			"a",
+			"e",
+			"i",
+			"o",
+			"u",
+			"y"
+		);
+		$lettreSpecial = array(
+			"&",
+			"(",
+			"-",
+			"_",
+			")",
+			"=",
+			",",
+			";",
+			":",
+			"!",
+			"$",
+			"*"
+		);
+		$i = 0;
+		for ($i = 0; $i < 4; $i++) {
+			if ($i == 0) {
+				$rand = array_rand($lettreConsonne);
+				$return = strtoupper($lettreConsonne[$rand]);
+				$rand = array_rand($lettreVoyelle);
+				$return .= $lettreVoyelle[$rand];
+			}
+			if ($i == 1 || $i == 2) {
+				$rand = array_rand($lettreConsonne);
+				$return .= $lettreConsonne[$rand];
+				$rand = array_rand($lettreVoyelle);
+				$return .= $lettreVoyelle[$rand];
+			}
+			if ($i == 3) {
+				$rand = array_rand($lettreSpecial);
+				$return .= $lettreSpecial[$rand];
+				$return .= rand(0, 9);
+			}
+			$i++;
+		}
+		return $return;
+	}
 }
 
 ?>
