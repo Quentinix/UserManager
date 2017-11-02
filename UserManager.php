@@ -5,6 +5,7 @@ require 'UserManager/SqlConfig.php';
 class UserManager extends SqlConfig {
 	
 	private $sqlConfig;
+	
 	private $sqlConnect;
 
 	function __construct() {
@@ -31,7 +32,7 @@ class UserManager extends SqlConfig {
 		if (mysqli_fetch_array($sqlResult) != NULL)
 			return false;
 		$passCrypt = $this->hashCrypt($pass);
-		mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getTableUser() . "` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '" . $user . "', '" . $pass_crypt . "', '" . $email . "', '" . $nom . "', '" . $prenom . "', '" . $adresse . "', '" . $ville . "', '" . $code_postal . "')");
+		mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getTableUser() . "` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '" . $user . "', '" . $passCrypt . "', '" . $email . "', '" . $nom . "', '" . $prenom . "', '" . $adresse . "', '" . $ville . "', '" . $code_postal . "')");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 		while (true) {
