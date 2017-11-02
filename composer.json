@@ -10,5 +10,8 @@
 			"email" : "git@quentinix.fr"
 		}
 	],
-	"minimum-stability" : "stable"
+	"minimum-stability" : "RC",
+	"support" : {
+		"email" : "git@quentinix.fr"
+	}
 }
