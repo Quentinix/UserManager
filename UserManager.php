@@ -7,16 +7,15 @@ use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 require 'Config.php';
 
-
 /**
  * Bibliothèque de fonctions pour la gestion d'utilisateurs
+ * 
  * @author Quentinix <git@quentinix.fr>
- *
  */
 class UserManager extends Config {
 	
 	private $sqlConnect;
-	
+
 	/**
 	 * Connexion à la base de données lors de l'appel de la class
 	 */
@@ -33,6 +32,7 @@ class UserManager extends Config {
 
 	/**
 	 * Retourne la version de la bibliothèque
+	 * 
 	 * @return string
 	 */
 	function version() {
@@ -41,8 +41,10 @@ class UserManager extends Config {
 
 	/**
 	 * Permet la création d'un nouveau utilisateur
-	 * Retourne false si l'utilisateur existe déjà ou si la fonction ne trouve pas suffisament de temps pour confirmer l'inscription de l'utilisateur
+	 * Retourne false si l'utilisateur existe déjà ou si la fonction ne trouve
+	 * pas suffisament de temps pour confirmer l'inscription de l'utilisateur
 	 * Retourne true si l'utilisateur a bien été créé
+	 * 
 	 * @param string $user
 	 * @param string $pass
 	 * @param string $email
@@ -83,8 +85,10 @@ class UserManager extends Config {
 
 	/**
 	 * Permet la connexion de l'utilisateur
-	 * Retourne false si le mot de passe est erroné ou si la fonction ne trouve pas suffisament de temps pour confirmer la connexion de l'utilisateur
+	 * Retourne false si le mot de passe est erroné ou si la fonction ne trouve
+	 * pas suffisament de temps pour confirmer la connexion de l'utilisateur
 	 * Retourne true si l'utilisateur est bien connecté
+	 * 
 	 * @param string $user
 	 * @param string $pass
 	 * @throws Exception
@@ -128,6 +132,7 @@ class UserManager extends Config {
 	/**
 	 * Permet déconnexion de l'utilisateur
 	 * Retourne toujours true si la requête SQL ne possède pas de problème
+	 * 
 	 * @throws Exception
 	 * @return boolean
 	 */
@@ -144,6 +149,7 @@ class UserManager extends Config {
 	 * Permet de modifier les informations de l'utilisateur qui est connecté
 	 * Retourne false si la modification du nom d'utilisateur existe déjà
 	 * Retourne true si les modifications sont bien enregistrées
+	 * 
 	 * @param string $user
 	 * @param string $nom
 	 * @param string $prenom
@@ -242,6 +248,7 @@ class UserManager extends Config {
 	 * Permet de modifier le mot de passe de l'utilisateur connecté
 	 * Retourne false si l'utilisateur n'est pas connecté
 	 * Retourne true si le mot de passe est bien enregistré
+	 * 
 	 * @param string $mdp
 	 * @throws Exception
 	 * @return boolean
@@ -259,6 +266,7 @@ class UserManager extends Config {
 
 	/**
 	 * Permet de renvoyer un tableau des informations de l'utilisateur connecté
+	 * 
 	 * @throws Exception
 	 * @return boolean[]|mixed[]
 	 */
@@ -289,6 +297,7 @@ class UserManager extends Config {
 	/**
 	 * Permet la suppression des sessions expirées dans la base de données
 	 * Retourne toujours true si la requête SQL est correctement executée
+	 * 
 	 * @throws Exception
 	 * @return boolean
 	 */
@@ -300,7 +309,9 @@ class UserManager extends Config {
 	}
 
 	/**
-	 * Permet la création d'un jeton pour la récupération d'un compte d'utilisateur
+	 * Permet la création d'un jeton pour la récupération d'un compte
+	 * d'utilisateur
+	 * 
 	 * @param string $email
 	 * @param string $user
 	 * @throws Exception
@@ -328,6 +339,7 @@ class UserManager extends Config {
 
 	/**
 	 * Permet la confirmation du propriétaire du compte d'utilisateur
+	 * 
 	 * @param string $token
 	 * @throws Exception
 	 * @return boolean|NULL
@@ -345,7 +357,9 @@ class UserManager extends Config {
 	}
 
 	/**
-	 * Permet le hashage d'une chaine de caractères et plus particulèrement du mot de passe lors de la création ou de la modification.
+	 * Permet le hashage d'une chaine de caractères et plus particulèrement du
+	 * mot de passe lors de la création ou de la modification.
+	 * 
 	 * @param string $mdp
 	 * @throws Exception
 	 * @return string
@@ -379,7 +393,9 @@ class UserManager extends Config {
 	}
 
 	/**
-	 * Permet la vérification entre le hashage et le mot de passe renseigné lors de la connexion
+	 * Permet la vérification entre le hashage et le mot de passe renseigné lors
+	 * de la connexion
+	 * 
 	 * @param string $mdp
 	 * @param string $mdpVerif
 	 * @throws Exception
@@ -418,6 +434,7 @@ class UserManager extends Config {
 
 	/**
 	 * Permet la création d'un mot de passe facile à retenir
+	 * 
 	 * @return string
 	 */
 	function createMdp() {
