@@ -1,5 +1,7 @@
 {
 	"name" : "quentinix/usermanager",
+	"description" : "Bibliothèque de fonctions pour la gestion d'utilisateurs",
+	"version" : "1.0.0",
 	"type" : "library",
 	"license" : "MIT",
 	"authors" : [{
