@@ -2,7 +2,7 @@
 
 namespace UserManager;
 
-class SqlConfig {
+class Config {
 	
 	private $configSqlHost = "localhost";
 	private $configSqlUser = "root";

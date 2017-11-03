@@ -4,9 +4,9 @@ namespace UserManager;
 
 use Exception;
 
-require 'SqlConfig.php';
+require 'Config.php';
 
-class UserManager extends SqlConfig {
+class UserManager extends Config {
 	
 	private $sqlConnect;
 
