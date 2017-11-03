@@ -36,7 +36,7 @@ class UserManager extends Config {
 	 * @return string
 	 */
 	function version() {
-		return "0.0.1";
+		return "1.0.0";
 	}
 
 	/**
