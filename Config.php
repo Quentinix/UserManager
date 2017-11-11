@@ -13,7 +13,7 @@ class Config {
 	private $configSqlTableRecovery = "um_recovery";
 	private $configSessionExpire = 86400;
 	private $configRecoveryExpire = 900;
-	private $configSeed = "33132-32037-26384-93187-91329-51957";
+	private $configSeed = "97654-89353-86415-93216-43067-95855";
 
 	public function getConfigSqlHost() {
 		return $this->configSqlHost;

@@ -18,7 +18,8 @@
 		"phpunit/phpunit" : "~6.4"
 	},
 	"scripts" : {
-		"post-autoload-dump" : "UserManager\\ComposerInstall::postInstallCmd"
+		"script" : "UserManager\\ComposerInstall::postInstallCmd",
+		"post-autoload-dump" : "@script"
 	},
 	"require" : {
 		"composer/composer" : "^1.5"
