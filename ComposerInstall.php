@@ -7,7 +7,7 @@ use Composer\Script\Event;
 class ComposerInstall {
 
 	public static function postInstallCmd(Event $event) {
-		$event->getIO()->write("Configuration de User Manager.");
+		$event->getIO()->write("Configuration de User Manager.\r\n");
 		$host = $event->getIO()->ask("IP MySQL(127.0.0.1) : ");
 		if ($host === null)
 			$host = "127.0.0.1";
