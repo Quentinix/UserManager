@@ -3,7 +3,6 @@
 namespace UserManager;
 
 use Exception;
-use phpDocumentor\Reflection\DocBlock\Tags\Method;
 
 require 'Config.php';
 
