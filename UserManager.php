@@ -99,22 +99,24 @@ class UserManager extends Config {
 		if ($pass == "")
 			throw new Exception("Pass n'est pas renseignée.");
 		$exeTimeBegin = time();
-		$sqlResult = mysqli_query($this->sqlConnect, "SELECT user, pass FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user, pass FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-		while ($sqlRow = mysqli_fetch_array($sqlResult))
+		while ($sqlRow = mysqli_fetch_array($sqlResult)) {
 			$passVerif = $sqlRow["pass"];
+			$userId = $sqlRow["id"];
+		}
 		if (! isset($passVerif))
 			return false;
 		if ($this->hashVerif($pass, $passVerif)) {
 			@session_start();
 			session_regenerate_id();
 			$expire = time() + $this->getConfigSessionExpire();
-			mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableSession() . "` (`id`, `user`, `session_id`, `expire`) VALUES (NULL, '" . $user . "', '" . session_id() . "', '" . $expire . "')");
+			mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableSession() . "` (`id`, `user_id`, `session_id`, `expire`) VALUES (NULL, '" . $userId . "', '" . session_id() . "', '" . $expire . "')");
 			if (mysqli_errno($this->sqlConnect))
 				throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 			while (true) {
-				$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableSession() . "` WHERE `user` LIKE '" . $user . "'");
+				$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableSession() . "` WHERE `user_id` LIKE '" . $userId . "'");
 				if (mysqli_errno($this->sqlConnect))
 					throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 				if (mysqli_fetch_array($sqlResult) != NULL)
@@ -271,7 +273,7 @@ class UserManager extends Config {
 	 */
 	function accountVerif() {
 		@session_start();
-		$sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user = " . $this->getConfigSqlTableUser() . ".user WHERE session_id = '" . session_id() . "' AND expire > " . time());
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND expire > " . time());
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 		while ($sqlRow = mysqli_fetch_array($sqlResult)) {
@@ -321,19 +323,18 @@ class UserManager extends Config {
 			throw new Exception("Email n'est pas renseignée.");
 		if ($user == "")
 			throw new Exception("User n'est pas renseignée.");
-		$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "' AND `email` LIKE '" . $email . "'");
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT id FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "' AND `email` LIKE '" . $email . "'");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-		if (mysqli_fetch_array($sqlResult) != NULL) {
+		while ($sqlRow = mysqli_fetch_array($sqlResult)) {
 			$uniqid = md5(uniqid()) . md5(uniqid());
 			$expire = time() + $this->getConfigRecoveryExpire();
-			mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableRecovery() . "` (`id`, `token`, `user`, `expire`) VALUES (NULL, '" . $uniqid . "', '" . $user . "', '" . $expire . "')");
+			mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableRecovery() . "` (`id`, `token`, `user_id`, `expire`) VALUES (NULL, '" . $uniqid . "', '" . $sqlRow["id"] . "', '" . $expire . "')");
 			if (mysqli_errno($this->sqlConnect))
 				throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 			return $uniqid;
-		} else {
-			return NULL;
 		}
+		return NULL;
 	}
 
 	/**

@@ -16,5 +16,16 @@
 	},
 	"require-dev" : {
 		"phpunit/phpunit" : "~6.4"
+	},
+	"scripts" : {
+		"post-install-cmd" : "UserManager\\ComposerInstall::postInstallCmd"
+	},
+	"require" : {
+		"composer/composer" : "^1.5"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"UserManager\\" : ""
+		}
 	}
 }

@@ -4,16 +4,16 @@ namespace UserManager;
 
 class Config {
 	
-	private $configSqlHost = "localhost";
+	private $configSqlHost = "127.0.0.1";
 	private $configSqlUser = "root";
 	private $configSqlPass = "";
-	private $configSqlDb = "usermanager_dev";
+	private $configSqlDb = "usermanager";
 	private $configSqlTableUser = "um_user";
 	private $configSqlTableSession = "um_session";
 	private $configSqlTableRecovery = "um_recovery";
 	private $configSessionExpire = 86400;
 	private $configRecoveryExpire = 900;
-	private $configSeed = "42068-40216-50795-54075-53207-42985";
+	private $configSeed = "58402-10059-34707-46541-54913-13326";
 
 	public function getConfigSqlHost() {
 		return $this->configSqlHost;
