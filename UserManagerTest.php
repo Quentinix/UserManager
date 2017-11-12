@@ -158,5 +158,33 @@ class UserManagerTest extends TestCase {
 		$this->assertSame(NULL, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
 	}
 
+	function testAccountUpdatePermSansUserEtPermission() {
+		$this->expectExceptionMessage("User n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountUpdatePerm("", "");
+	}
+
+	function testAccountUpdatePermSansUser() {
+		$this->expectExceptionMessage("User n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountUpdatePerm("", 42);
+	}
+
+	function testAccountUpdatePermSansPermission() {
+		$this->expectExceptionMessage("Permission n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountUpdatePerm("Utilisateur", "");
+	}
+
+	function testAccountUpdatePermUtilisateurInconnue() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountUpdatePerm("UtilisateurQuiExistePas", 42));
+	}
+
+	function testAccountUpdatePermUtilisateur() {
+		$testClass = new UserManager();
+		$this->assertSame(true, $testClass->accountUpdatePerm("PHPUnitUser2", 42));
+	}
+
 }
 

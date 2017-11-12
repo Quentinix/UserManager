@@ -266,6 +266,29 @@ class UserManager extends Config {
 	}
 
 	/**
+	 * Permet de modifier le niveau de permission d'un utilisateur.
+	 * Retourne false si le niveau de permission n'est pas attribué.
+	 * Retourne true si le niveau de permission est assigné.
+	 * 
+	 * @param string $user
+	 * @param integer $permission
+	 * @throws Exception
+	 * @return boolean
+	 */
+	function accountUpdatePerm($user, $permission) {
+		if ($user == "")
+			throw new Exception("User n'est pas renseignée.");
+		if ($permission === "")
+			throw new Exception("Permission n'est pas renseignée.");
+		mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `permission` = '" . $permission . "' WHERE `user` = '" . $user . "'");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		if (mysqli_affected_rows($this->sqlConnect) == 0)
+			return false;
+		return true;
+	}
+
+	/**
 	 * Permet de renvoyer un tableau des informations de l'utilisateur connecté
 	 * 
 	 * @throws Exception
@@ -273,13 +296,14 @@ class UserManager extends Config {
 	 */
 	function accountVerif() {
 		@session_start();
-		$sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND expire > " . time());
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, permission, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND expire > " . time());
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 		while ($sqlRow = mysqli_fetch_array($sqlResult)) {
 			return array(
 				"connect" => true,
 				"user" => $sqlRow["user"],
+				"permission" => $sqlRow["permission"],
 				"expire" => $sqlRow["expire"],
 				"sessionId" => $sqlRow["id"],
 				"email" => $sqlRow["email"],
