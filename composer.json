@@ -27,10 +27,5 @@
 		"psr-4" : {
 			"UserManager\\" : ""
 		}
-	},
-	"extra" : {
-		"brache-alias" : {
-			"dev-dev" : "1.1.0-dev"
-		}
 	}
 }
