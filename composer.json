@@ -9,7 +9,7 @@
 			"email" : "git@quentinix.fr"
 		}
 	],
-	"minimum-stability" : "RC",
+	"minimum-stability" : "stable",
 	"support" : {
 		"email" : "git@quentinix.fr",
 		"issues" : "https://github.com/Quentinix/UserManager/issues"
@@ -18,8 +18,7 @@
 		"phpunit/phpunit" : "~6.4"
 	},
 	"scripts" : {
-		"script" : "UserManager\\ComposerInstall::postInstallCmd",
-		"post-autoload-dump" : "@script"
+		"post-install-cmd" : "UserManager\\ComposerInstall::postInstallCmd"
 	},
 	"require" : {
 		"composer/composer" : "^1.5"
