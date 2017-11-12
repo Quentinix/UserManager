@@ -9,7 +9,7 @@
 			"email" : "git@quentinix.fr"
 		}
 	],
-	"minimum-stability" : "stable",
+	"minimum-stability" : "dev",
 	"support" : {
 		"email" : "git@quentinix.fr",
 		"issues" : "https://github.com/Quentinix/UserManager/issues"
