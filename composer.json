@@ -15,13 +15,11 @@
 		"issues" : "https://github.com/Quentinix/UserManager/issues"
 	},
 	"require-dev" : {
-		"phpunit/phpunit" : "~6.4"
+		"phpunit/phpunit" : "~6.4",
+		"composer/composer" : "^1.5"
 	},
 	"scripts" : {
 		"post-install-cmd" : "UserManager\\ComposerInstall::postInstallCmd"
-	},
-	"require" : {
-		"composer/composer" : "^1.5"
 	},
 	"autoload" : {
 		"psr-4" : {
