@@ -142,7 +142,7 @@ class UserManager extends Config {
 		mysqli_query($this->sqlConnect, "DELETE FROM `" . $this->getConfigSqlTableSession() . "` WHERE `session_id` = '" . session_id() . "'");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-		session_regenerate_id();
+		session_destroy();
 		return true;
 	}
 
