@@ -2,8 +2,8 @@
 
 require 'UserManager.php';
 
-use PHPUnit\Framework\TestCase;
 use UserManager\UserManager;
+use PHPUnit\Framework\TestCase;
 
 class UserManagerTest extends TestCase {
 	
