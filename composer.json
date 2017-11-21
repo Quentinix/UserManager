@@ -9,13 +9,10 @@
 			"email" : "git@quentinix.fr"
 		}
 	],
-	"minimum-stability" : "dev",
+	"minimum-stability" : "stable",
 	"support" : {
 		"email" : "git@quentinix.fr",
 		"issues" : "https://github.com/Quentinix/UserManager/issues"
-	},
-	"require-dev" : {
-		"phpunit/phpunit" : "~6.4"
 	},
 	"scripts" : {
 		"post-install-cmd" : "UserManager\\ComposerInstall::postInstallCmd"
@@ -24,5 +21,8 @@
 		"psr-4" : {
 			"UserManager\\" : ""
 		}
+	},
+	"require": {
+		"phpunit/phpunit": "^6.4"
 	}
 }
