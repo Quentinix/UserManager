@@ -11,6 +11,7 @@ class UserManagerTest extends TestCase {
 
 	function testPHPUnit() {
 		$this->assertSame(true, true);
+		$_SERVER["REMOTE_ADDR"] = "127.0.0.100";
 	}
 
 	function testAccountCreateSansUserEtPass() {
@@ -105,6 +106,14 @@ class UserManagerTest extends TestCase {
 	function testAccountVerifAvecConnexion() {
 		$testClass = new UserManager();
 		$this->assertArrayHasKey("user", $testClass->accountVerif());
+	}
+	
+	function testAccountVerifAvecConnexionMauvaisIP() {
+		$testClass = new UserManager();
+		$vraisIP = $_SERVER["REMOTE_ADDR"];
+		$_SERVER["REMOTE_ADDR"] = "999.999.999.999";
+		$this->assertArrayNotHasKeY("user", $testClass->accountVerif());
+		$_SERVER["REMOTE_ADDR"] = $vraisIP;
 	}
 
 	function testAccountRecoveryCreateAvecConnexionMauvaisEmail() {
