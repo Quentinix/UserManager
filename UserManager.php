@@ -320,6 +320,26 @@ class UserManager extends Config {
 	}
 
 	/**
+	 * Permet de retourner une valeur boolean selon la permission de
+	 * l'utilisateur
+	 * Retourne false si l'utilisateur n'est pas connecté ou si il ne possède
+	 * pas suffisament de permission
+	 * Retourne true si l'utilisateur possède suffisament de permission
+	 * 
+	 * @param integer $minPerm
+	 * @return boolean
+	 */
+	function accountVerifPerm($minPerm) {
+		$verif = $this->accountVerif();
+		if ($verif["connect"] != true)
+			return false;
+		elseif ($verif["permission"] >= $minPerm)
+			return true;
+		else
+			return false;
+	}
+
+	/**
 	 * Permet la suppression des sessions expirées dans la base de données
 	 * Retourne toujours true si la requête SQL est correctement executée
 	 * 
