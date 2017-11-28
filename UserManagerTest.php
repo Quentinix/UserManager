@@ -37,6 +37,34 @@ class UserManagerTest extends TestCase {
 		$this->assertSame(true, $testClass->accountCreate("PHPUnitUser", "MonMotDePasse"));
 	}
 
+	function testAccountUpdatePermSansUserEtPermission() {
+		$this->expectExceptionMessage("User n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountUpdatePerm("", "");
+	}
+
+	function testAccountUpdatePermSansUser() {
+		$this->expectExceptionMessage("User n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountUpdatePerm("", 42);
+	}
+
+	function testAccountUpdatePermSansPermission() {
+		$this->expectExceptionMessage("Permission n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountUpdatePerm("Utilisateur", "");
+	}
+
+	function testAccountUpdatePermUtilisateurInconnue() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountUpdatePerm("UtilisateurQuiExistePas", 42));
+	}
+
+	function testAccountUpdatePermUtilisateur() {
+		$testClass = new UserManager();
+		$this->assertSame(true, $testClass->accountUpdatePerm("PHPUnitUser", 42));
+	}
+
 	function testAccountCreateDoublon() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountCreate("PHPUnitUser", "MonMotDePasse"));
@@ -98,16 +126,36 @@ class UserManagerTest extends TestCase {
 		$this->assertSame(false, $testClass->accountConnect("PHPUnitUser", "PasLeBonMotDePasse"));
 	}
 
+	function testAccountVerifPermSansConnexionPasPermission() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountVerifPerm(52));
+	}
+	
+	function testAccountVerifPermSansConnexionAvecPermission() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountVerifPerm(32));
+	}
+
 	function testAccountConnect() {
 		$testClass = new UserManager();
 		$this->assertSame(true, $testClass->accountConnect("PHPUnitUser", "MonMotDePasse"));
+	}
+	
+	function testAccountVerifPermAvecConnexionSansPermission() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountVerifPerm(52));
+	}
+	
+	function testAccountVerifPermAvecConnexionAvecPermission() {
+		$testClass = new UserManager();
+		$this->assertSame(true, $testClass->accountVerifPerm(32));
 	}
 
 	function testAccountVerifAvecConnexion() {
 		$testClass = new UserManager();
 		$this->assertArrayHasKey("user", $testClass->accountVerif());
 	}
-	
+
 	function testAccountVerifAvecConnexionMauvaisIP() {
 		$testClass = new UserManager();
 		$vraisIP = $_SERVER["REMOTE_ADDR"];
@@ -151,6 +199,16 @@ class UserManagerTest extends TestCase {
 		$testClass = new UserManager();
 		$this->assertSame(true, $testClass->accountDisconnect());
 	}
+	
+	function testAccountVerifPermApresDeconnexionSansPermission() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountVerifPerm(52));
+	}
+	
+	function testAccountVerifPermApresDeconnexionAvecPermission() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountVerifPerm(32));
+	}
 
 	function testAccountVerifSansConnexionApresDeconnexion() {
 		$testClass = new UserManager();
@@ -166,34 +224,5 @@ class UserManagerTest extends TestCase {
 		$testClass = new UserManager();
 		$this->assertSame(NULL, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
 	}
-
-	function testAccountUpdatePermSansUserEtPermission() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountUpdatePerm("", "");
-	}
-
-	function testAccountUpdatePermSansUser() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountUpdatePerm("", 42);
-	}
-
-	function testAccountUpdatePermSansPermission() {
-		$this->expectExceptionMessage("Permission n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountUpdatePerm("Utilisateur", "");
-	}
-
-	function testAccountUpdatePermUtilisateurInconnue() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountUpdatePerm("UtilisateurQuiExistePas", 42));
-	}
-
-	function testAccountUpdatePermUtilisateur() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountUpdatePerm("PHPUnitUser2", 42));
-	}
-
 }
 
