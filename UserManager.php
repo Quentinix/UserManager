@@ -82,6 +82,17 @@ class UserManager extends Config {
 		}
 	}
 
+	function accountDelete($user) {
+		if ($user == "")
+			throw new Exception("User n'est pas renseignée.");
+		mysqli_query($this->sqlConnect, "DELETE FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` = " . $user);
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		if (mysqli_affected_rows($this->sqlConnect) == 0)
+			return false;
+		return true;
+	}
+
 	/**
 	 * Permet la connexion de l'utilisateur
 	 * Retourne false si le mot de passe est erroné ou si la fonction ne trouve
