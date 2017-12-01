@@ -200,6 +200,27 @@ class UserManagerTest extends TestCase {
 		$this->assertSame(true, $testClass->accountDisconnect());
 	}
 	
+	function testAccountDeleteSansUser(){
+		$this->expectExceptionMessage("User n'est pas renseignée.");
+		$testClass = new UserManager();
+		$testClass->accountDelete("");
+	}
+	
+	function testAccountDeleteUtilisateurQuiExistePas(){
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountDelete("QuiExistePas"));
+	}
+	
+	function testAccountDelete(){
+		$testClass = new UserManager();
+		$this->assertSame(true, $testClass->accountDelete("PHPUnitUser2"));
+	}
+	
+	function testAccountDeleteDoublon(){
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->accountDelete("PHPUnitUser2"));
+	}
+	
 	function testAccountVerifPermApresDeconnexionSansPermission() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountVerifPerm(52));
