@@ -114,12 +114,13 @@ CREATE TABLE IF NOT EXISTS `um_user` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `user` varchar(100) NOT NULL,
   `pass` longtext NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `nom` varchar(100) NOT NULL,
-  `prenom` varchar(100) NOT NULL,
-  `adresse` longtext NOT NULL,
-  `ville` varchar(100) NOT NULL,
-  `code_postal` int(11) NOT NULL,
+  `permission` int(255) NOT NULL DEFAULT 0,
+  `email` varchar(100) DEFAULT NULL,
+  `nom` varchar(100) DEFAULT NULL,
+  `prenom` varchar(100) DEFAULT NULL,
+  `adresse` longtext DEFAULT NULL,
+  `ville` varchar(100) DEFAULT NULL,
+  `code_postal` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
 
