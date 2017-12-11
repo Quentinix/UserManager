@@ -147,7 +147,7 @@ COMMIT;
 
 		");
 		echo " OK !\r\n";
-		echo "Ecriture du fichier de configuration...";
+		echo "Ecriture des fichiers de configurations...";
 		$fichierConfig = file("Config.php");
 		$fichierConfig[6] = '	private $configSqlHost = "' . $host . '";' . "\r\n";
 		$fichierConfig[7] = '	private $configSqlUser = "' . $user . '";' . "\r\n";
@@ -157,6 +157,9 @@ COMMIT;
 		$fichierConfig[14] = '	private $configRecoveryExpire = ' . $recoveryExpire . ';' . "\r\n";
 		$fichierConfig[15] = '	private $configSeed = "' . $seed . '";' . "\r\n";
 		file_put_contents('Config.php', implode('', $fichierConfig));
+		$fichierConfigOK = array();
+		$fichierConfigOK[0] = $seed;
+		file_put_contents('.configOK', implode('', $fichierConfigOK));
 		echo " OK !\r\n";
 	}
 }
