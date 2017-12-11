@@ -7,13 +7,13 @@ class Config {
 	private $configSqlHost = "127.0.0.1";
 	private $configSqlUser = "root";
 	private $configSqlPass = "";
-	private $configSqlDb = "usermanager_dev";
+	private $configSqlDb = "usermanager";
 	private $configSqlTableUser = "um_user";
 	private $configSqlTableSession = "um_session";
 	private $configSqlTableRecovery = "um_recovery";
 	private $configSessionExpire = 86400;
 	private $configRecoveryExpire = 900;
-	private $configSeed = "62170-45686-85894-18238-46622-73519";
+	private $configSeed = "18554-74849-70980-27915-50365-29792";
 
 	public function getConfigSqlHost() {
 		return $this->configSqlHost;

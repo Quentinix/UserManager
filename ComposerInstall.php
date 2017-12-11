@@ -3,6 +3,7 @@
 namespace UserManager;
 
 use Composer\Script\Event;
+use phpDocumentor\Reflection\Types\Null_;
 
 class ComposerInstall {
 
@@ -25,8 +26,25 @@ class ComposerInstall {
 		if ($recoveryExpire === null)
 			$recoveryExpire = "900";
 		$seedValide = false;
+		$seed = "";
+		if (@file_exists(".configOK") == true) {
+			$questionFail = true;
+			while ($questionFail == true) {
+				$questionFichierSeed = $event->GetIO()->ask("Une graine de génération aléatoire à été trouvée, la reprendre ?(OUI / non) : ");
+				if ($questionFichierSeed === null)
+					$questionFichierSeed = "oui";
+				if ($questionFichierSeed == "oui") {
+					$fichierConfigOKSeed = file(".configOK");
+					$seed = $fichierConfigOKSeed[0];
+					$questionFail = false;
+				} elseif ($questionFichierSeed == "non") {
+					$questionFail = false;
+				}
+			}
+		}
 		while (! $seedValide) {
-			$seed = $event->getIO()->ask("Graine de génération aléatoire pour mot de passe(exemple : 42068-40216-50795-54075-53207-42985, si vide : aléatoire) : ");
+			if ($seed !== @$fichierConfigOKSeed[0])
+				$seed = $event->getIO()->ask("Graine de génération aléatoire pour mot de passe(exemple : 42068-40216-50795-54075-53207-42985, si vide : aléatoire) : ");
 			if ($seed === null) {
 				$virguleSeed = false;
 				for ($i = 1; $i <= 6; $i++) {
@@ -50,6 +68,7 @@ class ComposerInstall {
 					$seedValide = true;
 				else {
 					$event->getIO()->write("Graine invalide.");
+					$seed = "";
 				}
 			}
 		}
