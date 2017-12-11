@@ -3,7 +3,6 @@
 namespace UserManager;
 
 use Composer\Script\Event;
-use phpDocumentor\Reflection\Types\Null_;
 
 class ComposerInstall {
 
