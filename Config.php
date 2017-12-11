@@ -7,7 +7,7 @@ class Config {
 	private $configSqlHost = "127.0.0.1";
 	private $configSqlUser = "root";
 	private $configSqlPass = "";
-	private $configSqlDb = "usermanager";
+	private $configSqlDb = "usermanager_dev";
 	private $configSqlTableUser = "um_user";
 	private $configSqlTableSession = "um_session";
 	private $configSqlTableRecovery = "um_recovery";
