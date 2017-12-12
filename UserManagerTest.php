@@ -6,9 +6,9 @@ use UserManager\UserManager;
 use PHPUnit\Framework\TestCase;
 
 class UserManagerTest extends TestCase {
-	
-	private $resultTestTokenRecovery;
 
+	// private $resultTestTokenRecovery;
+	
 	function testPHPUnit() {
 		$this->assertSame(true, true);
 		$_SERVER["REMOTE_ADDR"] = "127.0.0.100";
@@ -130,7 +130,7 @@ class UserManagerTest extends TestCase {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountVerifPerm(52));
 	}
-	
+
 	function testAccountVerifPermSansConnexionAvecPermission() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountVerifPerm(32));
@@ -140,12 +140,12 @@ class UserManagerTest extends TestCase {
 		$testClass = new UserManager();
 		$this->assertSame(true, $testClass->accountConnect("PHPUnitUser", "MonMotDePasse"));
 	}
-	
+
 	function testAccountVerifPermAvecConnexionSansPermission() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountVerifPerm(52));
 	}
-	
+
 	function testAccountVerifPermAvecConnexionAvecPermission() {
 		$testClass = new UserManager();
 		$this->assertSame(true, $testClass->accountVerifPerm(32));
@@ -192,40 +192,50 @@ class UserManagerTest extends TestCase {
 	 */
 	function testAccountRecoveryUse($resultTestAfter) {
 		$testClass = new UserManager();
-		$this->assertNotSame(false, $testClass->accountRecoveryUse($resultTestAfter));
+		$resultTest = $testClass->accountRecoveryUse($resultTestAfter);
+		$this->assertNotSame(false, $resultTest);
+		return $resultTest;
+	}
+
+	/**
+	 * @depends testAccountRecoveryCreateAvecConnexion
+	 */
+	function testAccountRecoveryUseDoublon($resultTestAfter) {
+		$testClass = new UserManager();
+		$this->assertSame(null, $testClass->accountRecoveryUse($resultTestAfter));
 	}
 
 	function testAccountDisconnect() {
 		$testClass = new UserManager();
 		$this->assertSame(true, $testClass->accountDisconnect());
 	}
-	
-	function testAccountDeleteSansUser(){
+
+	function testAccountDeleteSansUser() {
 		$this->expectExceptionMessage("User n'est pas renseignée.");
 		$testClass = new UserManager();
 		$testClass->accountDelete("");
 	}
-	
-	function testAccountDeleteUtilisateurQuiExistePas(){
+
+	function testAccountDeleteUtilisateurQuiExistePas() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountDelete("QuiExistePas"));
 	}
-	
-	function testAccountDelete(){
+
+	function testAccountDelete() {
 		$testClass = new UserManager();
 		$this->assertSame(true, $testClass->accountDelete("PHPUnitUser2"));
 	}
-	
-	function testAccountDeleteDoublon(){
+
+	function testAccountDeleteDoublon() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountDelete("PHPUnitUser2"));
 	}
-	
+
 	function testAccountVerifPermApresDeconnexionSansPermission() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountVerifPerm(52));
 	}
-	
+
 	function testAccountVerifPermApresDeconnexionAvecPermission() {
 		$testClass = new UserManager();
 		$this->assertSame(false, $testClass->accountVerifPerm(32));
