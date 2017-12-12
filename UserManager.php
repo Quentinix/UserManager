@@ -409,8 +409,12 @@ class UserManager extends Config {
 		$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableRecovery() . "` WHERE `token` LIKE '" . $token . "'");
 		if (mysqli_errno($this->sqlConnect))
 			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-		if ($sqlRow = mysqli_fetch_array($sqlResult) != NULL)
+		if ($sqlRow = mysqli_fetch_array($sqlResult) != NULL) {
+			mysqli_query($this->sqlConnect, "DELETE FROM `" . $this->getConfigSqlTableRecovery() . "` WHERE `id` = " . $sqlRow["id"]);
+			if (mysqli_errno($this->sqlConnect))
+				throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 			return $sqlRow["user"];
+		}
 		else
 			return NULL;
 	}
