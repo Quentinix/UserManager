@@ -255,5 +255,35 @@ class UserManagerTest extends TestCase {
 		$testClass = new UserManager();
 		$this->assertSame(NULL, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
 	}
+	
+	function testPermissionAdd() {
+		$testClass = new UserManager();
+		$this->assertSame(true, $testClass->permissionAdd(3042, "Label du level ultimator !"));
+	}
+	
+	function testPermissionAddDoublon() {
+		$testClass = new UserManager();
+		$this->assertSame(false, $testClass->permissionAdd(3042, "XxxLabel du level ultimator !xxX"));
+	}
+	
+	function testPermissionGet() {
+		$testClass = new UserManager();
+		$this->assertSame("Label du level ultimator !", $testClass->permissionGet(3042));
+	}
+	
+	function testPermissionGetExistePas() {
+		$testClass = new UserManager();
+		$this->assertSame("", $testClass->permissionGet(3043));
+	}
+	
+	function testPermissionRemove() {
+		$testClass = new UserManager();
+		$this->assertSame(true, $testClass->permissionGet(3043));
+	}
+	
+	function testPermissionGetExistePasApresSuppression() {
+		$testClass = new UserManager();
+		$this->assertSame("", $testClass->permissionGet(3042));
+	}
 }
 
