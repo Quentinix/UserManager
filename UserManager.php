@@ -414,9 +414,36 @@ class UserManager extends Config {
 			if (mysqli_errno($this->sqlConnect))
 				throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
 			return $sqlRow["user"];
-		}
-		else
+		} else
 			return NULL;
+	}
+
+	function permissionAdd($level, $name) {
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTablePermlabel() . "` WHERE `level` = '" . $level . "'");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		if (mysqli_fetch_array($sqlResult) != NULL)
+			return false;
+		mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTablePermlabel() . "` (`id`, `level`, `name`) VALUES (NULL, '" . $level . "', '" . $name . "')");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		return true;
+	}
+
+	function permissionRemove($level) {
+		mysqli_query($this->sqlConnect, "DELETE FROM `" . $this->getConfigSqlTablePermlabel() . "` WHERE `level` = '" . $level . "'");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		return true;
+	}
+
+	function permissionGet($level) {
+		$sqlResult = mysqli_query($this->sqlConnect, "SELECT `name` FROM `" . $this->getConfigSqlTablePermlabel() . "` WHERE `level` = '" . $level . "'");
+		if (mysqli_errno($this->sqlConnect))
+			throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+		while ($sqlRow = mysqli_fetch_array($sqlResult))
+			return $sqlRow["name"];
+		return "";
 	}
 
 	/**
