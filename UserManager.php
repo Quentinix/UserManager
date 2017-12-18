@@ -401,7 +401,7 @@ class UserManager extends Config {
 	 * 
 	 * @param string $token
 	 * @throws Exception
-	 * @return boolean|NULL
+	 * @return boolean|NULL //TODO: erreur boolean vers string
 	 */
 	function accountRecoveryUse($token) {
 		if ($token == "")
@@ -418,6 +418,16 @@ class UserManager extends Config {
 			return NULL;
 	}
 
+	/**
+	 * Permet l'ajout d'un label à un niveau de permission
+	 * Retourne false si un label existe déjà sur le niveau de permission choisi
+	 * Retourn true si le label est bien attribué au niveau de permission
+	 * 
+	 * @param integer $level
+	 * @param string $name
+	 * @throws Exception
+	 * @return boolean
+	 */
 	function permissionAdd($level, $name) {
 		$sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTablePermlabel() . "` WHERE `level` = '" . $level . "'");
 		if (mysqli_errno($this->sqlConnect))
@@ -430,6 +440,14 @@ class UserManager extends Config {
 		return true;
 	}
 
+	/**
+	 * Permet la suppression d'un label selon le niveau de permission
+	 * Retourn toujours true même si aucun label n'est attribué au niveau de permission
+	 * 
+	 * @param integer $level
+	 * @throws Exception
+	 * @return boolean
+	 */
 	function permissionRemove($level) {
 		mysqli_query($this->sqlConnect, "DELETE FROM `" . $this->getConfigSqlTablePermlabel() . "` WHERE `level` = '" . $level . "'");
 		if (mysqli_errno($this->sqlConnect))
@@ -437,6 +455,13 @@ class UserManager extends Config {
 		return true;
 	}
 
+	/**
+	 * Permet de retourné le label selon le niveau de permission 
+	 * 
+	 * @param integer $level
+	 * @throws Exception
+	 * @return string
+	 */
 	function permissionGet($level) {
 		$sqlResult = mysqli_query($this->sqlConnect, "SELECT `name` FROM `" . $this->getConfigSqlTablePermlabel() . "` WHERE `level` = '" . $level . "'");
 		if (mysqli_errno($this->sqlConnect))
