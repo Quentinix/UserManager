@@ -278,10 +278,10 @@ class UserManagerTest extends TestCase {
 	
 	function testPermissionRemove() {
 		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->permissionGet(3043));
+		$this->assertSame(true, $testClass->permissionRemove(3042));
 	}
 	
-	function testPermissionGetExistePasApresSuppression() {
+	function testPermissionGetApresSuppression() {
 		$testClass = new UserManager();
 		$this->assertSame("", $testClass->permissionGet(3042));
 	}
