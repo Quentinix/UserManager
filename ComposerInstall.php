@@ -80,22 +80,21 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = \"+00:00\";
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-CREATE DATABASE IF NOT EXISTS `" . $db . "` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `" . $db . "` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `" . $db . "`;
 
--- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `um_permlabel` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `level` int(255) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
---
--- Structure de la table `um_recovery`
---
-
-DROP TABLE IF EXISTS `um_recovery`;
 CREATE TABLE IF NOT EXISTS `um_recovery` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `token` varchar(100) NOT NULL,
@@ -105,29 +104,16 @@ CREATE TABLE IF NOT EXISTS `um_recovery` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `um_session`
---
-
-DROP TABLE IF EXISTS `um_session`;
 CREATE TABLE IF NOT EXISTS `um_session` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `user_id` int(255) NOT NULL,
   `session_id` varchar(100) NOT NULL,
+  `ip` varchar(20) NOT NULL,
   `expire` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `um_user`
---
-
-DROP TABLE IF EXISTS `um_user`;
 CREATE TABLE IF NOT EXISTS `um_user` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `user` varchar(100) NOT NULL,
@@ -142,19 +128,10 @@ CREATE TABLE IF NOT EXISTS `um_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Contraintes pour les tables déchargées
---
 
---
--- Contraintes pour la table `um_recovery`
---
 ALTER TABLE `um_recovery`
   ADD CONSTRAINT `um_recovery_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `um_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Contraintes pour la table `um_session`
---
 ALTER TABLE `um_session`
   ADD CONSTRAINT `um_session_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `um_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
