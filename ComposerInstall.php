@@ -7,48 +7,30 @@ use Composer\Script\Event;
 class ComposerInstall {
 
 	public static function postInstallCmd(Event $event) {
-		$host = $event->getIO()->ask("IP MySQL(127.0.0.1) : ");
-		if ($host === null)
-			$host = "127.0.0.1";
-		$user = $event->getIO()->ask("Nom d'utilisateur MySQL(root) : ");
-		if ($user === null)
-			$user = "root";
+		$host = $event->getIO()->ask("IP MySQL(127.0.0.1) : ", "127.0.0.1");
+		$user = $event->getIO()->ask("Nom d'utilisateur MySQL(root) : ", "root");
 		$pass = $event->getIO()->ask("Mot de passe MySQL(NULL) : ");
-		$db = $event->getIO()->ask("Base de données MySQL(usermanager) : ");
-		if ($db === null)
-			$db = "usermanager";
+		$db = $event->getIO()->ask("Base de données MySQL(usermanager) : ", "usermanager");
 		$port = $event->getIO()->ask("Port MySQL(NULL) : ");
-		$sessionExpire = $event->getIO()->ask("La session du compte utilisateur expire en seconde(86400 '1 jour') : ");
-		if ($sessionExpire === null)
-			$sessionExpire = "86400";
-		$recoveryExpire = $event->getIO()->ask("Le jeton de récupération du compte utilisateur expire en seconde(900 '15 minutes') : ");
-		if ($recoveryExpire === null)
-			$recoveryExpire = "900";
+		$sessionExpire = $event->getIO()->ask("La session du compte utilisateur expire en seconde(86400 '1 jour') : ", 86400);
+		$recoveryExpire = $event->getIO()->ask("Le jeton de récupération du compte utilisateur expire en seconde(900 '15 minutes') : ", 900);
 		$seedValide = false;
 		$seed = "";
 		if (@file_exists(".configOK") == true) {
-			$questionFail = true;
-			while ($questionFail == true) {
-				$questionFichierSeed = $event->GetIO()->ask("Une graine de génération aléatoire à été trouvée, la reprendre ?(OUI / non) : ");
-				if ($questionFichierSeed === null)
-					$questionFichierSeed = "oui";
-				if ($questionFichierSeed == "oui") {
-					$fichierConfigOKSeed = file(".configOK");
-					$seed = $fichierConfigOKSeed[0];
-					$questionFail = false;
-				} elseif ($questionFichierSeed == "non") {
-					$questionFail = false;
-				}
+			$questionFichierSeed = $event->GetIO()->ask("Une graine de génération aléatoire à été trouvée, la reprendre ?(OUI / non) : ", "oui");
+			if ($questionFichierSeed == "oui") {
+				$fichierConfigOKSeed = file(".configOK");
+				$seed = $fichierConfigOKSeed[0];
 			}
 		}
 		while (! $seedValide) {
 			if ($seed !== @$fichierConfigOKSeed[0])
 				$seed = $event->getIO()->ask("Graine de génération aléatoire pour mot de passe(exemple : 42068-40216-50795-54075-53207-42985, si vide : aléatoire) : ");
 			if ($seed === null) {
-				$virguleSeed = false;
+				$espaceSeed = false;
 				for ($i = 1; $i <= 6; $i++) {
-					if ($virguleSeed == false)
-						$virguleSeed = true;
+					if ($espaceSeed == false)
+						$espaceSeed = true;
 					else
 						$seed .= "-";
 					$seed .= mt_rand(10000, 99999);
@@ -71,8 +53,8 @@ class ComposerInstall {
 				}
 			}
 		}
-		$sqlConnect = mysqli_connect($host, $user, $pass, NULL, $port);
 		echo "Création de la base de données et des tables...";
+		$sqlConnect = mysqli_connect($host, $user, $pass, NULL, $port);
 		mysqli_multi_query($sqlConnect, "
 
 SET SQL_MODE = \"NO_AUTO_VALUE_ON_ZERO\";
