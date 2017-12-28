@@ -401,7 +401,7 @@ class UserManager extends Config {
 	 * 
 	 * @param string $token
 	 * @throws Exception
-	 * @return boolean|NULL //TODO: erreur boolean vers string
+	 * @return string|NULL
 	 */
 	function accountRecoveryUse($token) {
 		if ($token == "")
