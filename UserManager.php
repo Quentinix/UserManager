@@ -19,7 +19,7 @@ class UserManager extends Config {
 	 * Connexion à la base de données lors de l'appel de la class
 	 */
 	function __construct() {
-		if (@file_exists(".configOK") == false AND @file_exists("vendor/quentinix/usermanager/.configOK") == false)
+		if (@file_exists(".configOK") == false AND @file_exists("vendor/quentinix/usermanager/.configOK") == false) // TODO: vérifier l'emplacement du fichier selon le dossier d'appel
 			throw new Exception("La configuration de UserManager n'est pas appliquée.");
 		$this->sqlConnect = mysqli_connect($this->getConfigSqlHost(), $this->getConfigSqlUser(), $this->getConfigSqlPass(), $this->getConfigSqlDb());
 		if (mysqli_errno($this->sqlConnect))
