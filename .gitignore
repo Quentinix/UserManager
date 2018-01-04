@@ -1,6 +1,12 @@
-.*
-!.ht*
-!.gitignore
+# Visual Studio code
+.vscode
+
+# Eclipse IDE
+.settings
+.buildpath
+.project
+
+.configOK
 /vendor/
 /old/
 composer.phar
