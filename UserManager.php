@@ -20,7 +20,7 @@ class UserManager extends Config
      */
     public function __construct()
     {
-        if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/usermanager/.configOK") == false) { // TODO: vérifier l'emplacement du fichier selon le dossier d'appel
+        if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/usermanager/.configOK") == false) {
             throw new Exception("La configuration de UserManager n'est pas appliquée.");
         }
         require 'Config.php';

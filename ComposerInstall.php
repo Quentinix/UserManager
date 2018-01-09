@@ -141,7 +141,7 @@ COMMIT;
         );
         echo " OK !\r\n";
         echo "Ecriture des fichiers de configurations...";
-        $fichierConfig = file("Config.php"); // TODO: vérifier les lignes dans config.php
+        $fichierConfig = file("Config.php");
         $fichierConfig[15] = '	private $_configSqlHost = "' . $host . '";' . "\r\n";
         $fichierConfig[16] = '	private $_configSqlUser = "' . $user . '";' . "\r\n";
         $fichierConfig[17] = '	private $_configSqlPass = "' . $pass . '";' . "\r\n";
