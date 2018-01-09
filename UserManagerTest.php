@@ -1,289 +1,353 @@
 <?php
+// phpcs:disable Generic.Files.LineLength
 
-require 'UserManager.php';
+namespace UserManager;
 
 use UserManager\UserManager;
 use PHPUnit\Framework\TestCase;
 
-class UserManagerTest extends TestCase {
+/**
+ * Class des tests PHPUnit de la class UserManager
+ *
+ * @package  UserManager
+ * @author   Quentinix <git@quentinix.fr>
+ */
+class UserManagerTest extends TestCase
+{
+    // phpcs:disable PEAR.Commenting
 
-	// private $resultTestTokenRecovery;
-	
-	function testPHPUnit() {
-		$this->assertSame(true, true);
-		$_SERVER["REMOTE_ADDR"] = "127.0.0.100";
-	}
+    public function __construct()
+    {
+        require 'UserManager.php';
+    }
+    public function testPHPUnit()
+    {
+        $this->assertSame(true, true);
+        $_SERVER["REMOTE_ADDR"] = "127.0.0.100";
+    }
 
-	function testAccountCreateSansUserEtPass() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountCreate("", "");
-	}
+    public function testAccountCreateSansUserEtPass()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountCreate("", "");
+    }
 
-	function testAccountCreateSansUser() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountCreate("", "Mot de passe");
-	}
+    public function testAccountCreateSansUser()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountCreate("", "Mot de passe");
+    }
 
-	function testAccountCreateSansPass() {
-		$this->expectExceptionMessage("Pass n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountCreate("Nom d'utilisateur", "");
-	}
+    public function testAccountCreateSansPass()
+    {
+        $this->expectExceptionMessage("Pass n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountCreate("Nom d'utilisateur", "");
+    }
 
-	function testAccountCreate() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountCreate("PHPUnitUser", "MonMotDePasse"));
-	}
+    public function testAccountCreate()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountCreate("PHPUnitUser", "MonMotDePasse"));
+    }
 
-	function testAccountUpdatePermSansUserEtPermission() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountUpdatePerm("", "");
-	}
+    public function testAccountUpdatePermSansUserEtPermission()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountUpdatePerm("", "");
+    }
 
-	function testAccountUpdatePermSansUser() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountUpdatePerm("", 42);
-	}
+    public function testAccountUpdatePermSansUser()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountUpdatePerm("", 42);
+    }
 
-	function testAccountUpdatePermSansPermission() {
-		$this->expectExceptionMessage("Permission n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountUpdatePerm("Utilisateur", "");
-	}
+    public function testAccountUpdatePermSansPermission()
+    {
+        $this->expectExceptionMessage("Permission n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountUpdatePerm("Utilisateur", "");
+    }
 
-	function testAccountUpdatePermUtilisateurInconnue() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountUpdatePerm("UtilisateurQuiExistePas", 42));
-	}
+    public function testAccountUpdatePermUtilisateurInconnue()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountUpdatePerm("UtilisateurQuiExistePas", 42));
+    }
 
-	function testAccountUpdatePermUtilisateur() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountUpdatePerm("PHPUnitUser", 42));
-	}
+    public function testAccountUpdatePermUtilisateur()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountUpdatePerm("PHPUnitUser", 42));
+    }
 
-	function testAccountCreateDoublon() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountCreate("PHPUnitUser", "MonMotDePasse"));
-	}
+    public function testAccountCreateDoublon()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountCreate("PHPUnitUser", "MonMotDePasse"));
+    }
 
-	function testAccountModSansConnexion() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountMod("test"));
-	}
+    public function testAccountModSansConnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountMod("test"));
+    }
 
-	function testAccountRecoveryCreateSansEmailEtUser() {
-		$this->expectExceptionMessage("Email n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountRecoveryCreate("", "");
-	}
+    public function testAccountRecoveryCreateSansEmailEtUser()
+    {
+        $this->expectExceptionMessage("Email n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountRecoveryCreate("", "");
+    }
 
-	function testAccountRecoveryCreateSansEmail() {
-		$this->expectExceptionMessage("Email n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountRecoveryCreate("", "Utilisateur");
-	}
+    public function testAccountRecoveryCreateSansEmail()
+    {
+        $this->expectExceptionMessage("Email n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountRecoveryCreate("", "Utilisateur");
+    }
 
-	function testAccountRecoveryCreateSansUser() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountRecoveryCreate("MonemailpasBesoinArobase", "");
-	}
+    public function testAccountRecoveryCreateSansUser()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountRecoveryCreate("MonemailpasBesoinArobase", "");
+    }
 
-	function testAccountRecoveryCreateSansConnexion() {
-		$testClass = new UserManager();
-		$this->assertSame(NULL, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
-	}
+    public function testAccountRecoveryCreateSansConnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(null, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
+    }
 
-	function testAccountVerifSansConnexion() {
-		$testClass = new UserManager();
-		$this->assertArrayNotHasKey("user", $testClass->accountVerif());
-	}
+    public function testAccountVerifSansConnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertArrayNotHasKey("user", $testClass->accountVerif());
+    }
 
-	function testAccountConnectSansUserEtPass() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountConnect("", "");
-	}
+    public function testAccountConnectSansUserEtPass()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountConnect("", "");
+    }
 
-	function testAccountConnectSansUser() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountConnect("", "Mot de passe");
-	}
+    public function testAccountConnectSansUser()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountConnect("", "Mot de passe");
+    }
 
-	function testAccountConnectSansPass() {
-		$this->expectExceptionMessage("Pass n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountConnect("Nom d'utilisateur", "");
-	}
+    public function testAccountConnectSansPass()
+    {
+        $this->expectExceptionMessage("Pass n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountConnect("Nom d'utilisateur", "");
+    }
 
-	function testAccountConnectMauvaisMotDePasse() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountConnect("PHPUnitUser", "PasLeBonMotDePasse"));
-	}
+    public function testAccountConnectMauvaisMotDePasse()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountConnect("PHPUnitUser", "PasLeBonMotDePasse"));
+    }
 
-	function testAccountVerifPermSansConnexionPasPermission() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountVerifPerm(52));
-	}
+    public function testAccountVerifPermSansConnexionPasPermission()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountVerifPerm(52));
+    }
 
-	function testAccountVerifPermSansConnexionAvecPermission() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountVerifPerm(32));
-	}
+    public function testAccountVerifPermSansConnexionAvecPermission()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountVerifPerm(32));
+    }
 
-	function testAccountConnect() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountConnect("PHPUnitUser", "MonMotDePasse"));
-	}
+    public function testAccountConnect()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountConnect("PHPUnitUser", "MonMotDePasse"));
+    }
 
-	function testAccountVerifPermAvecConnexionSansPermission() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountVerifPerm(52));
-	}
+    public function testAccountVerifPermAvecConnexionSansPermission()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountVerifPerm(52));
+    }
 
-	function testAccountVerifPermAvecConnexionAvecPermission() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountVerifPerm(32));
-	}
+    public function testAccountVerifPermAvecConnexionAvecPermission()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountVerifPerm(32));
+    }
 
-	function testAccountVerifAvecConnexion() {
-		$testClass = new UserManager();
-		$this->assertArrayHasKey("user", $testClass->accountVerif());
-	}
+    public function testAccountVerifAvecConnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertArrayHasKey("user", $testClass->accountVerif());
+    }
 
-	function testAccountVerifAvecConnexionMauvaisIP() {
-		$testClass = new UserManager();
-		$vraisIP = $_SERVER["REMOTE_ADDR"];
-		$_SERVER["REMOTE_ADDR"] = "999.999.999.999";
-		$this->assertArrayNotHasKeY("user", $testClass->accountVerif());
-		$_SERVER["REMOTE_ADDR"] = $vraisIP;
-	}
+    public function testAccountVerifAvecConnexionMauvaisIP()
+    {
+        $testClass = new UserManager();
+        $vraisIP = $_SERVER["REMOTE_ADDR"];
+        $_SERVER["REMOTE_ADDR"] = "999.999.999.999";
+        $this->assertArrayNotHasKeY("user", $testClass->accountVerif());
+        $_SERVER["REMOTE_ADDR"] = $vraisIP;
+    }
 
-	function testAccountRecoveryCreateAvecConnexionMauvaisEmail() {
-		$testClass = new UserManager();
-		$this->assertSame(NULL, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
-	}
+    public function testAccountRecoveryCreateAvecConnexionMauvaisEmail()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(null, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
+    }
 
-	function testAccountModAvecConnexion() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountMod("PHPUnitUser2", "", "", "phpunit@testclass.net"));
-	}
+    public function testAccountModAvecConnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountMod("PHPUnitUser2", "", "", "phpunit@testclass.net"));
+    }
 
-	function testAccountRecoveryUseSansToken() {
-		$this->expectExceptionMessage("Token n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountRecoveryUse("");
-	}
+    public function testAccountRecoveryUseSansToken()
+    {
+        $this->expectExceptionMessage("Token n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountRecoveryUse("");
+    }
 
-	function testAccountRecoveryCreateAvecConnexion() {
-		$testClass = new UserManager();
-		$resultTest = $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser2");
-		$this->assertNotSame(false, $resultTest);
-		return $resultTest;
-	}
+    public function testAccountRecoveryCreateAvecConnexion()
+    {
+        $testClass = new UserManager();
+        $resultTest = $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser2");
+        $this->assertNotSame(false, $resultTest);
+        return $resultTest;
+    }
 
-	/**
-	 * @depends testAccountRecoveryCreateAvecConnexion
-	 */
-	function testAccountRecoveryUse($resultTestAfter) {
-		$testClass = new UserManager();
-		$resultTest = $testClass->accountRecoveryUse($resultTestAfter);
-		$this->assertNotSame(false, $resultTest);
-		return $resultTest;
-	}
+    /**
+     * Dépendance de la fonction testAccountRecoveryCreateAvecConnexion
+     *
+     * @depends testAccountRecoveryCreateAvecConnexion
+     */
+    public function testAccountRecoveryUse($resultTestAfter)
+    {
+        $testClass = new UserManager();
+        $resultTest = $testClass->accountRecoveryUse($resultTestAfter);
+        $this->assertNotSame(false, $resultTest);
+        return $resultTest;
+    }
 
-	/**
-	 * @depends testAccountRecoveryCreateAvecConnexion
-	 */
-	function testAccountRecoveryUseDoublon($resultTestAfter) {
-		$testClass = new UserManager();
-		$this->assertSame(null, $testClass->accountRecoveryUse($resultTestAfter));
-	}
+    /**
+     * Dépendance de la fonction testAccountRecoveryCreateAvecConnexion
+     *
+     * @depends testAccountRecoveryCreateAvecConnexion
+     */
+    public function testAccountRecoveryUseDoublon($resultTestAfter)
+    {
+        $testClass = new UserManager();
+        $this->assertSame(null, $testClass->accountRecoveryUse($resultTestAfter));
+    }
 
-	function testAccountDisconnect() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountDisconnect());
-	}
+    public function testAccountDisconnect()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountDisconnect());
+    }
 
-	function testAccountDeleteSansUser() {
-		$this->expectExceptionMessage("User n'est pas renseignée.");
-		$testClass = new UserManager();
-		$testClass->accountDelete("");
-	}
+    public function testAccountDeleteSansUser()
+    {
+        $this->expectExceptionMessage("User n'est pas renseignée.");
+        $testClass = new UserManager();
+        $testClass->accountDelete("");
+    }
 
-	function testAccountDeleteUtilisateurQuiExistePas() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountDelete("QuiExistePas"));
-	}
+    public function testAccountDeleteUtilisateurQuiExistePas()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountDelete("QuiExistePas"));
+    }
 
-	function testAccountDelete() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->accountDelete("PHPUnitUser2"));
-	}
+    public function testAccountDelete()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountDelete("PHPUnitUser2"));
+    }
 
-	function testAccountDeleteDoublon() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountDelete("PHPUnitUser2"));
-	}
+    public function testAccountDeleteDoublon()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountDelete("PHPUnitUser2"));
+    }
 
-	function testAccountVerifPermApresDeconnexionSansPermission() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountVerifPerm(52));
-	}
+    public function testAccountVerifPermApresDeconnexionSansPermission()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountVerifPerm(52));
+    }
 
-	function testAccountVerifPermApresDeconnexionAvecPermission() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountVerifPerm(32));
-	}
+    public function testAccountVerifPermApresDeconnexionAvecPermission()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountVerifPerm(32));
+    }
 
-	function testAccountVerifSansConnexionApresDeconnexion() {
-		$testClass = new UserManager();
-		$this->assertArrayNotHasKey("user", $testClass->accountVerif());
-	}
+    public function testAccountVerifSansConnexionApresDeconnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertArrayNotHasKey("user", $testClass->accountVerif());
+    }
 
-	function testAccountModSansConnexionApresDeconnexion() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->accountMod("test"));
-	}
+    public function testAccountModSansConnexionApresDeconnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountMod("test"));
+    }
 
-	function testAccountRecoveryCreateSansConnexionApresDeconnexion() {
-		$testClass = new UserManager();
-		$this->assertSame(NULL, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
-	}
-	
-	function testPermissionAdd() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->permissionAdd(3042, "Label du level ultimator !"));
-	}
-	
-	function testPermissionAddDoublon() {
-		$testClass = new UserManager();
-		$this->assertSame(false, $testClass->permissionAdd(3042, "XxxLabel du level ultimator !xxX"));
-	}
-	
-	function testPermissionGet() {
-		$testClass = new UserManager();
-		$this->assertSame("Label du level ultimator !", $testClass->permissionGet(3042));
-	}
-	
-	function testPermissionGetExistePas() {
-		$testClass = new UserManager();
-		$this->assertSame("", $testClass->permissionGet(3043));
-	}
-	
-	function testPermissionRemove() {
-		$testClass = new UserManager();
-		$this->assertSame(true, $testClass->permissionRemove(3042));
-	}
-	
-	function testPermissionGetApresSuppression() {
-		$testClass = new UserManager();
-		$this->assertSame("", $testClass->permissionGet(3042));
-	}
+    public function testAccountRecoveryCreateSansConnexionApresDeconnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(null, $testClass->accountRecoveryCreate("phpunit@testclass.net", "PHPUnitUser"));
+    }
+    
+    public function testPermissionAdd()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->permissionAdd(3042, "Label du level ultimator !"));
+    }
+    
+    public function testPermissionAddDoublon()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->permissionAdd(3042, "XxxLabel du level ultimator !xxX"));
+    }
+    
+    public function testPermissionGet()
+    {
+        $testClass = new UserManager();
+        $this->assertSame("Label du level ultimator !", $testClass->permissionGet(3042));
+    }
+    
+    public function testPermissionGetExistePas()
+    {
+        $testClass = new UserManager();
+        $this->assertSame("", $testClass->permissionGet(3043));
+    }
+    
+    public function testPermissionRemove()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->permissionRemove(3042));
+    }
+    
+    public function testPermissionGetApresSuppression()
+    {
+        $testClass = new UserManager();
+        $this->assertSame("", $testClass->permissionGet(3042));
+    }
 }
-

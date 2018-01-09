@@ -10,3 +10,4 @@
 /vendor/
 /old/
 composer.phar
+.php_cs.cache
