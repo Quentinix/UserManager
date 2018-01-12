@@ -9,5 +9,6 @@
 .configOK
 /vendor/
 /old/
+/bdd/
 composer.phar
 .php_cs.cache
