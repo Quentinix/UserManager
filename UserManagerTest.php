@@ -3,6 +3,8 @@
 
 namespace UserManager;
 
+require "UserManager.php";
+
 use UserManager\UserManager;
 use PHPUnit\Framework\TestCase;
 
@@ -16,10 +18,6 @@ class UserManagerTest extends TestCase
 {
     // phpcs:disable PEAR.Commenting
 
-    public function __construct()
-    {
-        require 'UserManager.php';
-    }
     public function testPHPUnit()
     {
         $this->assertSame(true, true);
