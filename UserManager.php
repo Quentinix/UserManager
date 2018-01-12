@@ -20,9 +20,9 @@ class UserManager extends Config
      */
     public function __construct()
     {
-        if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/usermanager/.configOK") == false) {
-            throw new Exception("La configuration de UserManager n'est pas appliquée.");
-        }
+        // if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/usermanager/.configOK") == false) {
+        //     throw new Exception("La configuration de UserManager n'est pas appliquée.");
+        // } Solution reportée !
         require 'Config.php';
         $this->sqlConnect = mysqli_connect($this->getConfigSqlHost(), $this->getConfigSqlUser(), $this->getConfigSqlPass(), $this->getConfigSqlDb());
         if (mysqli_errno($this->sqlConnect)) {
