@@ -46,7 +46,7 @@ class UserManager extends Config
      */
     public function version()
     {
-        return "1.2.0-RC3";
+        return "1.2.0-RC4";
     }
 
     /**
