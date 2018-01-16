@@ -328,11 +328,11 @@ class UserManager extends Config
      */
     public function accountModMdp($mdp)
     {
-        $verif = accountVerif();
+        $verif = $this->accountVerif();
         if ($verif["connect"] == false) {
             return false;
         }
-        $mdpHash = hashCreate($mdp);
+        $mdpHash = $this->hashCreate($mdp);
         mysqli_query($this->sql_connect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `pass` = '" . $mdpHash . "' WHERE `id` = " . $verif["id_utilisateur"]);
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
