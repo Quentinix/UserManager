@@ -25,7 +25,7 @@ class ComposerInstall
         $recoveryExpire = $event->getIO()->ask("Le jeton de récupération du compte utilisateur expire en seconde(900 '15 minutes') : ", 900);
         $seedValide = false;
         $seed = "";
-        if (@file_exists(".configOK") == true) {
+        if (@file_exists(".configOK") == true or (@file_exists("../../../.configOK") and @file_exists("../../../composer.json"))) {
             $questionFichierSeed = $event->GetIO()->ask("Une graine de génération aléatoire à été trouvée, la reprendre ?(OUI / non) : ", "oui");
             if ($questionFichierSeed == "oui") {
                 $fichierConfigOKSeed = file(".configOK");
