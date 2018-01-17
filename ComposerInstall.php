@@ -143,6 +143,9 @@ COMMIT;
         $fichierConfigOK = array();
         $fichierConfigOK[0] = $seed;
         file_put_contents('.configOK', implode('', $fichierConfigOK));
+        if (file_exists("../../../composer.json")) {
+            copy(".configOK", "../../../.configOK");
+        }
         echo " OK !\r\n";
     }
 }
