@@ -22,6 +22,10 @@
     <filter>
         <whitelist>
             <directory suffix=".php">.</directory>
+            <exclude>
+                <directory suffix=".php">./vendor/</directory>
+                <file>./UserManagerTest.php</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
