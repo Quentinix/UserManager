@@ -1,0 +1,4 @@
+# Ne pas supprimer
+<Files ".configOK">
+    Require all denied
+</Files>
