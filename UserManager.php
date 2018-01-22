@@ -181,9 +181,8 @@ class UserManager extends Config
                     return false;
                 }
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
