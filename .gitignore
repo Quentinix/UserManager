@@ -1,14 +1,7 @@
 # Visual Studio code
 .vscode
 
-# Eclipse IDE
-.settings
-.buildpath
-.project
-
 .configOK
-/vendor/
-/old/
-/bdd/
-composer.phar
 .php_cs.cache
+/vendor/
+/build/
