@@ -9,19 +9,19 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-		 stderr="true"
+         stderr="true"
 >
     <testsuites>
         <testsuite name="Package Test Suite">
             <file>UserManagerTest.php</file>
         </testsuite>
     </testsuites>
-	<logging>
-		<log type="coverage-clover" target="build/logs/clover.xml"/>
-	</logging>
-	<filter>
-		<whitelist>
-			<directory suffix=".php">.</directory>
-		</whitelist>
-	</filter>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">.</directory>
+        </whitelist>
+    </filter>
 </phpunit>
