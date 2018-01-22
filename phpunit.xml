@@ -17,6 +17,11 @@
         </testsuite>
     </testsuites>
 	<logging>
-		<log type="coverage-xml" target="build/coverage-xml/index.xml"/>
+		<log type="coverage-clover" target="build/logs/clover.xml"/>
 	</logging>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">.</directory>
+		</whitelist>
+	</filter>
 </phpunit>
