@@ -496,9 +496,8 @@ class UserManager extends Config
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
             return $sqlRow["user"];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
