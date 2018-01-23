@@ -14,14 +14,14 @@ class Config
     private $configSqlHost = "127.0.0.1";
     private $configSqlUser = "root";
     private $configSqlPass = "";
-    private $configSqlDb = "usermanager_dev";
+    private $configSqlDb = "usermanager";
     private $configSqlTableUser = "um_user";
     private $configSqlTableSession = "um_session";
     private $configSqlTableRecovery = "um_recovery";
     private $configSqlTablePermlabel = "um_permlabel";
     private $configSessionExpire = 86400;
     private $configRecoveryExpire = 900;
-    private $configSeed = "18554-74849-70980-27915-50365-29792";
+    private $configSeed = "54987-90400-93605-34136-24507-68510";
 
     public function getConfigSqlHost()
     {

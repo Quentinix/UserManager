@@ -133,9 +133,10 @@ COMMIT;
         echo " OK !\r\n";
     }
 
-    public function generateSeed()
+    public static function generateSeed()
     {
         $espaceSeed = false;
+        $seed = "";
         for ($i = 1; $i <= 6; $i++) {
             if ($espaceSeed == false) {
                 $espaceSeed = true;
@@ -147,7 +148,7 @@ COMMIT;
         return $seed;
     }
 
-    public function valideSeed($seedVerif)
+    public static function valideSeed($seed)
     {
         $seedVerif = explode("-", $seed);
         $verifCount = 0;
