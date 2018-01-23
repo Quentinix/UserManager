@@ -657,9 +657,8 @@ class UserManager extends Config
         $mdpHash = $seedRand . implode("", $mdpSplit);
         if ($mdpVerif === $mdpHash) {
             return true;
-        } else {
-            return false;
         }
+            return false;
     }
 
     /**
