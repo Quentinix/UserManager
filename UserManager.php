@@ -587,26 +587,7 @@ class UserManager extends Config
         }
         $mdpHash = hash("sha256", $mdpHash . $seedRand);
         $mdpSplit = str_split($mdpHash);
-        for ($i = 0; $i <= 63; $i++) {
-            if ($mdpSplit[$i] == "a") {
-                $mdpSplit[$i] = $seed[0];
-            }
-            if ($mdpSplit[$i] == "b") {
-                $mdpSplit[$i] = $seed[1];
-            }
-            if ($mdpSplit[$i] == "c") {
-                $mdpSplit[$i] = $seed[2];
-            }
-            if ($mdpSplit[$i] == "d") {
-                $mdpSplit[$i] = $seed[3];
-            }
-            if ($mdpSplit[$i] == "e") {
-                $mdpSplit[$i] = $seed[4];
-            }
-            if ($mdpSplit[$i] == "f") {
-                $mdpSplit[$i] = $seed[5];
-            }
-        }
+        $this->hashEncodeAlpha(64, $seed, $mdpSplit);
         $mdpHash = $seedRand . implode("", $mdpSplit);
         return $mdpHash;
     }
@@ -634,7 +615,17 @@ class UserManager extends Config
         $seedRand = substr($mdpVerif, 0, 128);
         $mdpHash = hash("sha256", $mdpHash . $seedRand);
         $mdpSplit = str_split($mdpHash);
-        for ($i = 0; $i <= 63; $i++) {
+        $this->hashEncodeAlpha(64, $seed, $mdpSplit);
+        $mdpHash = $seedRand . implode("", $mdpSplit);
+        if ($mdpVerif === $mdpHash) {
+            return true;
+        }
+            return false;
+    }
+
+    public function hashEncodeAlpha($number, $seed, &$mdpSplit)
+    {
+        for ($i = 0; $i < $number; $i++) {
             if ($mdpSplit[$i] == "a") {
                 $mdpSplit[$i] = $seed[0];
             }
@@ -654,11 +645,7 @@ class UserManager extends Config
                 $mdpSplit[$i] = $seed[5];
             }
         }
-        $mdpHash = $seedRand . implode("", $mdpSplit);
-        if ($mdpVerif === $mdpHash) {
-            return true;
-        }
-            return false;
+
     }
 
     /**
