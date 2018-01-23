@@ -36,38 +36,18 @@ class ComposerInstall
                 $seed = $fichierConfigOKSeed[0];
             }
         }
-        while (! $seedValide) {
+        while (true) {
             if ($seed !== @$fichierConfigOKSeed[0]) {
                 $seed = $event->getIO()->ask("Graine de génération aléatoire pour mot de passe(exemple : 42068-40216-50795-54075-53207-42985, si vide : aléatoire) : ");
             }
             if ($seed === null) {
-                $espaceSeed = false;
-                for ($i = 1; $i <= 6; $i++) {
-                    if ($espaceSeed == false) {
-                        $espaceSeed = true;
-                    } else {
-                        $seed .= "-";
-                    }
-                    $seed .= mt_rand(10000, 99999);
-                }
-                $seedValide = true;
+                $seed = self::generateSeed();
+                break;
             } else {
-                $seedVerif = explode("-", $seed);
-                $verifCount = 0;
-                for ($i = 0; $i < 7; $i++) {
-                    if (! isset($seedVerif[$i])) {
-                        break;
-                    }
-                    if ($seedVerif[$i] >= 10000 and $seedVerif[$i] <= 99999) {
-                        $verifCount++;
-                    }
+                if (self::valideSeed($seed)) {
+                    break;
                 }
-                if ($verifCount == 6) {
-                    $seedValide = true;
-                } else {
-                    $event->getIO()->write("Graine invalide.");
-                    $seed = "";
-                }
+                $event->getIO()->write("Graine invalide !");
             }
         }
         echo "Création de la base de données et des tables...";
@@ -151,5 +131,37 @@ COMMIT;
             copy(".configOK", "../../../.configOK");
         }
         echo " OK !\r\n";
+    }
+
+    public function generateSeed()
+    {
+        $espaceSeed = false;
+        for ($i = 1; $i <= 6; $i++) {
+            if ($espaceSeed == false) {
+                $espaceSeed = true;
+            } else {
+                $seed .= "-";
+            }
+            $seed .= mt_rand(10000, 99999);
+        }
+        return $seed;
+    }
+
+    public function valideSeed($seedVerif)
+    {
+        $seedVerif = explode("-", $seed);
+        $verifCount = 0;
+        for ($i = 0; $i < 7; $i++) {
+            if (! isset($seedVerif[$i])) {
+                break;
+            }
+            if ($seedVerif[$i] >= 10000 and $seedVerif[$i] <= 99999) {
+                $verifCount++;
+            }
+        }
+        if ($verifCount == 6) {
+            return true;
+        }
+        return false;
     }
 }
