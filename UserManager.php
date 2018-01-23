@@ -419,9 +419,8 @@ class UserManager extends Config
             return false;
         } elseif ($verif["permission"] >= $minPerm) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
