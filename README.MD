@@ -21,6 +21,6 @@ La dépendance est maintenant utilisable pour votre projet ! :)
 Tester avec PHPUnit
 -------------------
 
-Vous pouvez tester cette dépendance grace au fichier UserManagerTest.php et PHPUnit.
+Vous pouvez tester cette dépendance grace à PHPUnit.
 
-Utilisez donc la commande **phpunit ./UserManagerTest.php**
+Utilisez donc la commande **phpunit** à la racine de la dépendance.
