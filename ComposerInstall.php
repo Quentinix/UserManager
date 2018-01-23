@@ -23,7 +23,6 @@ class ComposerInstall
         $port = $event->getIO()->ask("Port MySQL(NULL) : ");
         $sessionExpire = $event->getIO()->ask("La session du compte utilisateur expire en seconde(86400 '1 jour') : ", 86400);
         $recoveryExpire = $event->getIO()->ask("Le jeton de récupération du compte utilisateur expire en seconde(900 '15 minutes') : ", 900);
-        $seedValide = false;
         $seed = "";
         if (@file_exists(".configOK") or (@file_exists("../../../.configOK") and @file_exists("../../../composer.json"))) {
             $questionFichierSeed = $event->GetIO()->ask("Une graine de génération aléatoire à été trouvée, la reprendre ?(OUI / non) : ", "oui");
