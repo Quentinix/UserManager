@@ -25,6 +25,7 @@
             <exclude>
                 <directory suffix=".php">./vendor/</directory>
                 <file>./UserManagerTest.php</file>
+                <file>./ComposerInstall.php</file>
             </exclude>
         </whitelist>
     </filter>
