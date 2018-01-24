@@ -15,7 +15,7 @@ Serveur MariaDB 10.1 minimum ou MySQL 5.7 minimum
 Installation par Composer
 -------------------------
 
-1. Executez : **composer require quentinix/usermanager 1.2.*** dans le dossier du projet.
+1. Executez : **composer require quentinix/usermanager 1.2.\*** dans le dossier du projet.
 2. Allez dans le dossier du project avec : **cd vendor/quentinix/usermanager**.
 3. Executez : **composer run-script config**
 
