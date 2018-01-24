@@ -1,6 +1,9 @@
 User Manager
 ===========
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/124dfab578544851bdef8c05fe0a6bc8)](https://www.codacy.com/app/Quentinix/UserManager?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/UserManager&utm_campaign=badger)
+
+
 Gestionnaire d'utilisateurs utilisables pour les sites web. 
 
 ----------
