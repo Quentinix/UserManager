@@ -5,6 +5,10 @@ php:
 services:
   - mysql
 
+notifications:
+  - on_success: change
+  - on_failure: always
+
 before_script:
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
