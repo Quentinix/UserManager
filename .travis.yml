@@ -1,3 +1,18 @@
 language: php
 php:
   - 7.1.9
+
+services:
+  - mysql
+
+before_script:
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar install
+  - mysql -u root --default-character-set=utf8 baladay < scripts/db.sql
+  - php composer.phar run-script travisConfig
+
+script:
+  - php vendor/bin/phpunit
+
+after_script:
+  - php vendor/bin/codacycoverage clover

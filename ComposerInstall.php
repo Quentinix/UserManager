@@ -14,7 +14,7 @@ use Composer\Script\Event;
 class ComposerInstall
 {
     // phpcs:disable PEAR.Commenting
-    public static function postInstallCmd(Event $event)
+    public static function config(Event $event)
     {
         $host = $event->getIO()->ask("IP MySQL(127.0.0.1) : ", "127.0.0.1");
         $user = $event->getIO()->ask("Nom d'utilisateur MySQL(root) : ", "root");
@@ -130,6 +130,28 @@ COMMIT;
             copy(".configOK", "../../../.configOK");
         }
         echo " OK !\r\n";
+    }
+
+    public function travisConfig()
+    {
+        echo "Execution TravisConfig...\r\n";
+        echo "Lecture Config.php...\r\n";
+        $fichierConfig = file("Config.php");
+        echo "Modification de la configuration de Config.php...\r\n";
+        $fichierConfig[13] = '    private $configSqlHost = "127.0.0.1";' . "\r\n";
+        $fichierConfig[14] = '    private $configSqlUser = "root";' . "\r\n";
+        $fichierConfig[15] = '    private $configSqlPass = "";' . "\r\n";
+        $fichierConfig[16] = '    private $configSqlDb = "usermanager_travis";' . "\r\n";
+        $fichierConfig[21] = '    private $configSessionExpire = 3600;' . "\r\n";
+        $fichierConfig[22] = '    private $configRecoveryExpire = 3600;' . "\r\n";
+        $fichierConfig[23] = '    private $configSeed = "54987-90400-93605-34136-24507-68510";' . "\r\n";
+        echo "Réécriture de la configuration de Config.php...\r\n";
+        file_put_contents('Config.php', implode('', $fichierConfig));
+        echo "Sauvegarde de la graine...\r\n";
+        $fichierConfigOK = array();
+        $fichierConfigOK[0] = $seed;
+        file_put_contents('.configOK', implode('', $fichierConfigOK));
+        echo " Execution terminée !\r\n";
     }
 
     public static function generateSeed()

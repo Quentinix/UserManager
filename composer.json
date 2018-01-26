@@ -15,8 +15,8 @@
 		"issues" : "https://github.com/Quentinix/UserManager/issues"
 	},
 	"scripts" : {
-		"config" : "UserManager\\ComposerInstall::postInstallCmd",
-		"post-install-cmd" : "@config"
+		"config" : "UserManager\\ComposerInstall::config",
+		"travisConfig" : "UserManager\\ComposerInstall::travisConfig"
 	},
 	"autoload" : {
 		"psr-4" : {
@@ -24,6 +24,8 @@
 		}
 	},
 	"require-dev" : {
-		"phpunit/phpunit" : "^6.4"
+		"phpunit/phpunit" : "^6.4",
+		"codacy/coverage": "^1.4",
+		"composer/composer": "^1.6"
 	}
 }
