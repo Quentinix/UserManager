@@ -149,7 +149,7 @@ COMMIT;
         file_put_contents('Config.php', implode('', $fichierConfig));
         echo "Sauvegarde de la graine...\r\n";
         $fichierConfigOK = array();
-        $fichierConfigOK[0] = $seed;
+        $fichierConfigOK[0] = "54987-90400-93605-34136-24507-68510";
         file_put_contents('.configOK', implode('', $fichierConfigOK));
         echo " Execution terminée !\r\n";
     }
