@@ -645,7 +645,6 @@ class UserManager extends Config
                 $mdpSplit[$i] = $seed[5];
             }
         }
-
     }
 
     /**
