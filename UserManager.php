@@ -3,8 +3,6 @@
 
 namespace UserManager;
 
-require "Config.php";
-
 use Exception;
 
 /**
