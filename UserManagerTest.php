@@ -3,7 +3,7 @@
 
 namespace UserManager;
 
-require "UserManager.php";
+// require "UserManager.php";
 
 use UserManager\UserManager;
 use PHPUnit\Framework\TestCase;
@@ -128,6 +128,12 @@ class UserManagerTest extends TestCase
         $testClass = new UserManager();
         $this->assertArrayNotHasKey("user", $testClass->accountVerif());
     }
+    
+    public function testAccountModMdpSansConnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountModMdp("AutreMotDePasse"));
+    }
 
     public function testAccountConnectSansUserEtPass()
     {
@@ -172,6 +178,18 @@ class UserManagerTest extends TestCase
     {
         $testClass = new UserManager();
         $this->assertSame(true, $testClass->accountConnect("PHPUnitUser", "MonMotDePasse"));
+    }
+
+    public function testAccountModMdpUn()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountModMdp("AutreMotDePasse"));
+    }
+
+    public function testAccountModMdpDeux()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountModMdp("MonMotDePasse"));
     }
 
     public function testAccountVerifPermAvecConnexionSansPermission()
@@ -256,6 +274,12 @@ class UserManagerTest extends TestCase
     {
         $testClass = new UserManager();
         $this->assertSame(true, $testClass->accountDisconnect());
+    }
+
+    public function testAccountModMdpApresDeconnexion()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(false, $testClass->accountModMdp("AutreMotDePasse"));
     }
 
     public function testAccountDeleteSansUser()
