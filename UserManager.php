@@ -88,19 +88,20 @@ class UserManager extends Config
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
-        while (true) {
-            $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
-            if (mysqli_errno($this->sqlConnect)) {
-                throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-            }
-            if (mysqli_fetch_array($sqlResult) != null) {
-                return true;
-            }
-            sleep(1);
-            if (ini_get("max_execution_time") > time() - $exeTimeBegin - 2) {
-                return false;
-            }
-        }
+        return true;
+        // while (true) {
+        //     $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
+        //     if (mysqli_errno($this->sqlConnect)) {
+        //         throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        //     }
+        //     if (mysqli_fetch_array($sqlResult) != null) {
+        //         return true;
+        //     }
+        //     sleep(1);
+        //     if (ini_get("max_execution_time") > time() - $exeTimeBegin - 2) {
+        //         return false;
+        //     }
+        // } Partie en test
     }
 
     /**
@@ -168,19 +169,20 @@ class UserManager extends Config
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
-            while (true) {
-                $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableSession() . "` WHERE `user_id` LIKE '" . $userId . "'");
-                if (mysqli_errno($this->sqlConnect)) {
-                    throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-                }
-                if (mysqli_fetch_array($sqlResult) != null) {
-                    return true;
-                }
-                sleep(1);
-                if (ini_get("max_execution_time") > time() - $exeTimeBegin - 2) {
-                    return false;
-                }
-            }
+            return true;
+            // while (true) {
+            //     $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableSession() . "` WHERE `user_id` LIKE '" . $userId . "'");
+            //     if (mysqli_errno($this->sqlConnect)) {
+            //         throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+            //     }
+            //     if (mysqli_fetch_array($sqlResult) != null) {
+            //         return true;
+            //     }
+            //     sleep(1);
+            //     if (ini_get("max_execution_time") > time() - $exeTimeBegin - 2) {
+            //         return false;
+            //     }
+            // } partie en test
         }
         return false;
     }
