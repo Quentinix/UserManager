@@ -332,7 +332,7 @@ class UserManager extends Config
             return false;
         }
         $mdpHash = $this->hashCreate($mdp);
-        mysqli_query($this->sql_connect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `pass` = '" . $mdpHash . "' WHERE `id` = " . $verif["id_utilisateur"]);
+        mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `pass` = '" . $mdpHash . "' WHERE `id` = " . $verif["userId"]);
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -377,7 +377,7 @@ class UserManager extends Config
     public function accountVerif()
     {
         @session_start();
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, permission, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND expire > " . time() . " AND ip = '" . $_SERVER["REMOTE_ADDR"] . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, user_id, permission, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND expire > " . time() . " AND ip = '" . $_SERVER["REMOTE_ADDR"] . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -388,6 +388,7 @@ class UserManager extends Config
                 "permission" => $sqlRow["permission"],
                 "expire" => $sqlRow["expire"],
                 "sessionId" => $sqlRow["id"],
+                "userId" => $sqlRow["user_id"],
                 "email" => $sqlRow["email"],
                 "nom" => $sqlRow["nom"],
                 "prenom" => $sqlRow["prenom"],
