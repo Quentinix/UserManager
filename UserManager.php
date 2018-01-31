@@ -433,7 +433,7 @@ class UserManager extends Config
      */
     public function accountClearSession()
     {
-        mysqli_query($this->sql_connect, "DELETE FROM `" . $this->getConfigSqlTableSession() . "` WHERE `expire` < " . time());
+        mysqli_query($this->sqlConnect, "DELETE FROM `" . $this->getConfigSqlTableSession() . "` WHERE `expire` < " . time());
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
