@@ -73,7 +73,7 @@ class UserManager extends Config
         if ($pass == "") {
             throw new Exception("Pass n'est pas renseignée.");
         }
-        $exeTimeBegin = time();
+        // $exeTimeBegin = time(); Lien avec le commentaire ligne 90
         $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser() . " WHERE `user` LIKE '" . $user . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
@@ -147,7 +147,7 @@ class UserManager extends Config
         if ($pass == "") {
             throw new Exception("Pass n'est pas renseignée.");
         }
-        $exeTimeBegin = time();
+        // $exeTimeBegin = time(); Lien avec le commentaire ligne 171
         $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user, pass FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
