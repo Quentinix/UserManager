@@ -372,4 +372,10 @@ class UserManagerTest extends TestCase
         $testClass = new UserManager();
         $this->assertSame("", $testClass->permissionGet(3042));
     }
+
+    public function testAccountClearSession()
+    {
+        $testClass = new UserManager();
+        $this->assertSame(true, $testClass->accountClearSession());
+    }
 }
