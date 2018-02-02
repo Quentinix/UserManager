@@ -1,7 +1,7 @@
 {
 	"name" : "quentinix/usermanager",
 	"description" : "Bibliothèque de fonctions pour la gestion d'utilisateurs",
-	"version" : "1.1.3",
+	"version" : "1.2.0",
 	"type" : "library",
 	"license" : "MIT",
 	"authors" : [{
@@ -9,20 +9,23 @@
 			"email" : "git@quentinix.fr"
 		}
 	],
-	"minimum-stability" : "dev",
+	"minimum-stability" : "stable",
 	"support" : {
 		"email" : "git@quentinix.fr",
 		"issues" : "https://github.com/Quentinix/UserManager/issues"
 	},
-	"require-dev" : {
-		"phpunit/phpunit" : "~6.4"
-	},
 	"scripts" : {
-		"post-install-cmd" : "UserManager\\ComposerInstall::postInstallCmd"
+		"config" : "UserManager\\ComposerInstall::config",
+		"travisConfig" : "UserManager\\ComposerInstall::travisConfig"
 	},
 	"autoload" : {
 		"psr-4" : {
 			"UserManager\\" : ""
 		}
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "^6.4",
+		"codacy/coverage": "^1.4",
+		"composer/composer": "^1.6"
 	}
 }

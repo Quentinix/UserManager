@@ -1,0 +1,22 @@
+language: php
+php:
+  - 7.1.9
+
+services:
+  - mysql
+
+notifications:
+  - on_success: change
+  - on_failure: always
+
+before_script:
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar install
+  - mysql -u root --default-character-set=utf8 < build/script/waveTravis.sql
+  - php composer.phar run-script travisConfig
+
+script:
+  - php vendor/bin/phpunit
+
+after_script:
+  - php vendor/bin/codacycoverage clover

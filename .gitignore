@@ -1,4 +1,8 @@
-.*
-!.gitignore
+# Visual Studio code
+.vscode
+
+.configOK
+.php_cs.cache
 /vendor/
-/old/
+/build/*
+!/build/script
