@@ -3,7 +3,7 @@ User Manager
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/124dfab578544851bdef8c05fe0a6bc8)](https://www.codacy.com/app/Quentinix/UserManager?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/UserManager&utm_campaign=badger)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/802287394f6048669bb07ad3c294e13b)](https://www.codacy.com/app/Quentinix/UserManager?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/UserManager&utm_campaign=Badge_Coverage)
-[![Build Status](https://travis-ci.org/Quentinix/UserManager.svg?branch=master)](https://travis-ci.org/Quentinix/UserManager)
+[![Build Status](https://travis-ci.org/Quentinix/Wave.svg?branch=master)](https://travis-ci.org/Quentinix/Wave)
 
 Gestionnaire d'utilisateurs utilisable pour les sites web.
 ----------------------------------------------------------
