@@ -7,10 +7,10 @@ SET time_zone
 = "+00:00";
 
 CREATE DATABASE
-IF NOT EXISTS `usermanager_travis` DEFAULT CHARACTER
+IF NOT EXISTS `wave_travis` DEFAULT CHARACTER
 SET utf8mb4
 COLLATE utf8mb4_general_ci;
-USE `usermanager_travis`;
+USE `wave_travis`;
 
 CREATE TABLE
 IF NOT EXISTS `um_permlabel`

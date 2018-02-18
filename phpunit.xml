@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="Package Test Suite">
-            <file>UserManagerTest.php</file>
+            <file>WaveTest.php</file>
         </testsuite>
     </testsuites>
     <logging>
@@ -24,7 +24,7 @@
             <directory suffix=".php">.</directory>
             <exclude>
                 <directory suffix=".php">./vendor/</directory>
-                <file>./UserManagerTest.php</file>
+                <file>./WaveTest.php</file>
                 <file>./ComposerInstall.php</file>
             </exclude>
         </whitelist>

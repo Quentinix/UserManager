@@ -1,17 +1,17 @@
 <?php
 // phpcs:disable Generic.Files.LineLength
 
-namespace UserManager;
+namespace Wave;
 
 use Exception;
 
 /**
  * Class de la gestion d'utilisateurs
  *
- * @package  Usermanager
+ * @package  Wave
  * @author   Quentinix <git@quentinix.fr>
  */
-class UserManager extends Config
+class Wave extends Config
 {
     private $sqlConnect;
 
@@ -20,8 +20,8 @@ class UserManager extends Config
      */
     public function __construct()
     {
-        // if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/usermanager/.configOK") == false) {
-        //     throw new Exception("La configuration de UserManager n'est pas appliquée.");
+        // if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/wave/.configOK") == false) {
+        //     throw new Exception("La configuration de Wave n'est pas appliquée.");
         // } Solution reportée !
         $this->sqlConnect = mysqli_connect($this->getConfigSqlHost(), $this->getConfigSqlUser(), $this->getConfigSqlPass(), $this->getConfigSqlDb());
         if (mysqli_errno($this->sqlConnect)) {

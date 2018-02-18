@@ -12,15 +12,15 @@
 	"minimum-stability" : "stable",
 	"support" : {
 		"email" : "git@quentinix.fr",
-		"issues" : "https://github.com/Quentinix/UserManager/issues"
+		"issues" : "https://github.com/Quentinix/Wave/issues"
 	},
 	"scripts" : {
-		"config" : "UserManager\\ComposerInstall::config",
-		"travisConfig" : "UserManager\\ComposerInstall::travisConfig"
+		"config" : "Wave\\ComposerInstall::config",
+		"travisConfig" : "Wave\\ComposerInstall::travisConfig"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"UserManager\\" : ""
+			"Wave\\" : ""
 		}
 	},
 	"require-dev" : {

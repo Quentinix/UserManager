@@ -1,14 +1,14 @@
 <?php
 // phpcs:disable Generic.Files.LineLength
 
-namespace UserManager;
+namespace Wave;
 
 use Composer\Script\Event;
 
 /**
- * Class de l'installation de la class UserManager
+ * Class de l'installation de la class Wave
  *
- * @package  UserManager
+ * @package  Wave
  * @author   Quentinix <git@quentinix.fr>
  */
 class ComposerInstall
@@ -19,7 +19,7 @@ class ComposerInstall
         $host = $event->getIO()->ask("IP MySQL(127.0.0.1) : ", "127.0.0.1");
         $user = $event->getIO()->ask("Nom d'utilisateur MySQL(root) : ", "root");
         $pass = $event->getIO()->ask("Mot de passe MySQL(NULL) : ");
-        $db = $event->getIO()->ask("Base de données MySQL(usermanager) : ", "usermanager");
+        $db = $event->getIO()->ask("Base de données MySQL(wave) : ", "wave");
         $port = $event->getIO()->ask("Port MySQL(NULL) : ");
         $sessionExpire = $event->getIO()->ask("La session du compte utilisateur expire en seconde(86400 '1 jour') : ", 86400);
         $recoveryExpire = $event->getIO()->ask("Le jeton de récupération du compte utilisateur expire en seconde(900 '15 minutes') : ", 900);
@@ -141,7 +141,7 @@ COMMIT;
         $fichierConfig[13] = '    private $configSqlHost = "127.0.0.1";' . "\r\n";
         $fichierConfig[14] = '    private $configSqlUser = "root";' . "\r\n";
         $fichierConfig[15] = '    private $configSqlPass = "";' . "\r\n";
-        $fichierConfig[16] = '    private $configSqlDb = "usermanager_travis";' . "\r\n";
+        $fichierConfig[16] = '    private $configSqlDb = "wave_travis";' . "\r\n";
         $fichierConfig[21] = '    private $configSessionExpire = 3600;' . "\r\n";
         $fichierConfig[22] = '    private $configRecoveryExpire = 3600;' . "\r\n";
         $fichierConfig[23] = '    private $configSeed = "54987-90400-93605-34136-24507-68510";' . "\r\n";

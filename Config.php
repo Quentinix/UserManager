@@ -1,11 +1,11 @@
 <?php
 
-namespace UserManager;
+namespace Wave;
 
 /**
- * Class de la configuration de la class UserManager
+ * Class de la configuration de la class Wave
  *
- * @package  UserManager
+ * @package  Wave
  * @author   Quentinix <git@quentinix.fr>
  */
 class Config
@@ -14,7 +14,7 @@ class Config
     private $configSqlHost = "127.0.0.1";
     private $configSqlUser = "root";
     private $configSqlPass = "";
-    private $configSqlDb = "usermanager";
+    private $configSqlDb = "wave_dev";
     private $configSqlTableUser = "um_user";
     private $configSqlTableSession = "um_session";
     private $configSqlTableRecovery = "um_recovery";
