@@ -5,7 +5,6 @@ namespace Wave;
 
 // require "Wave.php";
 
-use Wave\Core;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,7 +19,6 @@ class WaveTest extends TestCase
 
     public function testPHPUnit()
     {
-        new Core;
         $this->assertSame(true, true);
         $_SERVER["REMOTE_ADDR"] = "127.0.0.100";
     }
