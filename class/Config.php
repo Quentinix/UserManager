@@ -21,7 +21,7 @@ class Config
     private $configSqlTablePermlabel = "um_permlabel";
     private $configSessionExpire = 86400;
     private $configRecoveryExpire = 900;
-    private $configSeed = "54987-90400-93605-34136-24507-68510";
+    private $configSeed = "99861-13858-22054-43819-72808-38016";
 
     public function getConfigSqlHost()
     {
