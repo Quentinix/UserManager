@@ -5,10 +5,12 @@ Wave
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/802287394f6048669bb07ad3c294e13b)](https://www.codacy.com/app/Quentinix/Wave?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/Wave&utm_campaign=Badge_Coverage)
 [![Build Status](https://travis-ci.org/Quentinix/Wave.svg?branch=master)](https://travis-ci.org/Quentinix/Wave)
 
-Gestionnaire d'utilisateurs utilisable pour les sites web.
-----------------------------------------------------------
+Gestionnaire d'utilisateurs utilisable pour les sites web
+---------------------------------------------------------
+
 Pres-requis
 -----------
+
 PHP version 5.6.31 minimum
 
 Serveur MariaDB 10.1 minimum ou MySQL 5.7 minimum
