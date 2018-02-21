@@ -1,5 +1,5 @@
-User Manager
-===========
+Wave
+====
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/124dfab578544851bdef8c05fe0a6bc8)](https://www.codacy.com/app/Quentinix/Wave?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/Wave&utm_campaign=badger)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/802287394f6048669bb07ad3c294e13b)](https://www.codacy.com/app/Quentinix/Wave?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/Wave&utm_campaign=Badge_Coverage)
