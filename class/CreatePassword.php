@@ -5,54 +5,14 @@ namespace Wave;
 
 use Exception;
 
-/**
- * Class de la gestion d'utilisateurs
- *
- * @package  Wave
- * @author   Quentinix <git@quentinix.fr>
- */
-class Wave extends Config
+class CreatePassword extends Config
 {
-    private $sqlConnect;
-
-    /**
-     * Connexion à la base de données lors de l'appel de la class
-     */
-    public function __construct()
-    {
-        // if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/wave/.configOK") == false) {
-        //     throw new Exception("La configuration de Wave n'est pas appliquée.");
-        // } Solution reportée !
-        $this->sqlConnect = mysqli_connect($this->getConfigSqlHost(), $this->getConfigSqlUser(), $this->getConfigSqlPass(), $this->getConfigSqlDb());
-        if (mysqli_errno($this->sqlConnect)) {
-            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-        }
-    }
-
-    /**
-     * Déconnexion de la base de données
-     */
-    public function __destruct()
-    {
-        mysqli_close($this->sqlConnect);
-    }
-
-    /**
-     * Retourne la version de la bibliothèque
-     *
-     * @return string
-     */
-    public function version()
-    {
-        return "1.3.0-dev";
-    }
-
     /**
      * Permet la création d'un mot de passe facile à retenir
      *
      * @return string
      */
-    public function createMdp()
+    public function createPassword()
     {
         $lettreConsonne = array(
             "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"
