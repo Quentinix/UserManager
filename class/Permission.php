@@ -5,6 +5,12 @@ namespace Wave;
 
 use Exception;
 
+/**
+ * Classe de la gestion des permissions
+ *
+ * @package  Wave
+ * @author   Quentinix <git@quentinix.fr>
+ */
 class Permission extends Config
 {
     /**

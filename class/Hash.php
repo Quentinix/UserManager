@@ -5,6 +5,12 @@ namespace Wave;
 
 use Exception;
 
+/**
+ * Classe Hash
+ *
+ * @package  Wave
+ * @author   Quentinix <git@quentinix.fr>
+ */
 class Hash extends Config
 {
     /**

@@ -3,7 +3,7 @@
 namespace Wave;
 
 /**
- * Class de la configuration de la class Wave
+ * Classe de la configuration
  *
  * @package  Wave
  * @author   Quentinix <git@quentinix.fr>

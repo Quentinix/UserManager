@@ -5,8 +5,25 @@ namespace Wave;
 
 use Exception;
 
+/**
+ * Classe de la gestion des comptes
+ *
+ * @package  Wave
+ * @author   Quentinix <git@quentinix.fr>
+ */
 class Account extends Config
 {
+
+    private $sqlConnect;
+
+    /**
+     * Appel de la connexion à la base de données
+     */
+    public function __construct() {
+        $sql = new Sql;
+        $this->sqlConnect = $sql->getSqlConnect();
+    }
+
     /**
      * Permet la création d'un nouveau utilisateur
      * Retourne false si l'utilisateur existe déjà ou si la fonction ne trouve

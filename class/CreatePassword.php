@@ -5,6 +5,12 @@ namespace Wave;
 
 use Exception;
 
+/**
+ * Classe création des mots de passe
+ *
+ * @package  Wave
+ * @author   Quentinix <git@quentinix.fr>
+ */
 class CreatePassword extends Config
 {
     /**

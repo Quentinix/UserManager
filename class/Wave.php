@@ -6,7 +6,7 @@ namespace Wave;
 use Exception;
 
 /**
- * Class de la gestion d'utilisateurs
+ * Classe de la gestion d'utilisateurs
  *
  * @package  Wave
  * @author   Quentinix <git@quentinix.fr>
@@ -14,20 +14,6 @@ use Exception;
 class Wave extends Config
 {
     private $sqlConnect;
-
-    /**
-     * Connexion à la base de données lors de l'appel de la class
-     */
-    public function __construct()
-    {
-        // if (@file_exists(".configOK") == false and @file_exists("vendor/quentinix/wave/.configOK") == false) {
-        //     throw new Exception("La configuration de Wave n'est pas appliquée.");
-        // } Solution reportée !
-        $this->sqlConnect = mysqli_connect($this->getConfigSqlHost(), $this->getConfigSqlUser(), $this->getConfigSqlPass(), $this->getConfigSqlDb());
-        if (mysqli_errno($this->sqlConnect)) {
-            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-        }
-    }
 
     /**
      * Déconnexion de la base de données
