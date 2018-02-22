@@ -13,6 +13,17 @@ use Exception;
  */
 class Permission extends Config
 {
+
+    private $sqlConnect;
+    
+    /**
+     * Appel de la connexion à la base de données
+     */
+    public function __construct() {
+        $sqlClass = new Sql;
+        $this->sqlConnect = $sqlClass->getSqlConnect();
+    }
+
     /**
      * Permet l'ajout d'un label à un niveau de permission
      * Retourne false si un label existe déjà sur le niveau de permission choisi

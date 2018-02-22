@@ -338,37 +338,37 @@ class WaveTest extends TestCase
     
     public function testPermissionAdd()
     {
-        $testClass = new Account();
+        $testClass = new Permission();
         $this->assertSame(true, $testClass->permissionAdd(3042, "Label du level ultimator !"));
     }
     
     public function testPermissionAddDoublon()
     {
-        $testClass = new Account();
+        $testClass = new Permission();
         $this->assertSame(false, $testClass->permissionAdd(3042, "XxxLabel du level ultimator !xxX"));
     }
     
     public function testPermissionGet()
     {
-        $testClass = new Account();
+        $testClass = new Permission();
         $this->assertSame("Label du level ultimator !", $testClass->permissionGet(3042));
     }
     
     public function testPermissionGetExistePas()
     {
-        $testClass = new Account();
+        $testClass = new Permission();
         $this->assertSame("", $testClass->permissionGet(3043));
     }
     
     public function testPermissionRemove()
     {
-        $testClass = new Account();
+        $testClass = new Permission();
         $this->assertSame(true, $testClass->permissionRemove(3042));
     }
     
     public function testPermissionGetApresSuppression()
     {
-        $testClass = new Account();
+        $testClass = new Permission();
         $this->assertSame("", $testClass->permissionGet(3042));
     }
 

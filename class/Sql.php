@@ -32,7 +32,7 @@ class Sql extends Config
     /**
      * Appel de la connexion SQL
      */
-    public function GetSqlConnect()
+    public function getSqlConnect()
     {
         return $this->sqlConnect;
     }

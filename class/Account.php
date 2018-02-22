@@ -15,13 +15,13 @@ class Account extends Config
 {
 
     private $sqlConnect;
-
+    
     /**
      * Appel de la connexion à la base de données
      */
     public function __construct() {
-        $sql = new Sql;
-        $this->sqlConnect = $sql->getSqlConnect();
+        $sqlClass = new Sql;
+        $this->sqlConnect = $sqlClass->getSqlConnect();
     }
 
     /**
@@ -58,7 +58,8 @@ class Account extends Config
         if (mysqli_fetch_array($sqlResult) != null) {
             return false;
         }
-        $passCrypt = $this->hashCreate($pass);
+        $hash = new Hash;
+        $passCrypt = $hash->hashCreate($pass);
         mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableUser() . "` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '" . $user . "', '" . $passCrypt . "', '" . $email . "', '" . $nom . "', '" . $prenom . "', '" . $adresse . "', '" . $ville . "', '" . $code_postal . "')");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
@@ -136,7 +137,8 @@ class Account extends Config
         if (! isset($passVerif)) {
             return false;
         }
-        if ($this->hashVerif($pass, $passVerif)) {
+        $hash = new Hash;
+        if ($hash->hashVerif($pass, $passVerif)) {
             @session_start();
             session_regenerate_id();
             $expire = time() + $this->getConfigSessionExpire();
@@ -308,7 +310,8 @@ class Account extends Config
         if ($verif["connect"] == false) {
             return false;
         }
-        $mdpHash = $this->hashCreate($mdp);
+        $hash = new Hash;
+        $mdpHash = $hash->hashCreate($mdp);
         mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `pass` = '" . $mdpHash . "' WHERE `id` = " . $verif["userId"]);
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
