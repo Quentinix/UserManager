@@ -1,7 +1,7 @@
 <?php
 // phpcs:disable Generic.Files.LineLength
 
-namespace Wave;
+namespace ComposerConfig;
 
 use Composer\Script\Event;
 

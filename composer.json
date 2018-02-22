@@ -15,12 +15,13 @@
 		"issues" : "https://github.com/Quentinix/Wave/issues"
 	},
 	"scripts" : {
-		"config" : "Wave\\ComposerInstall::config",
-		"travisConfig" : "Wave\\ComposerInstall::travisConfig"
+		"config" : "ComposerConfig\\ComposerInstall::config",
+		"travisConfig" : "ComposerConfig\\ComposerInstall::travisConfig"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Wave\\" : "class/"
+			"Wave\\" : "class/",
+			"ComposerConfig\\" : ""
 		}
 	},
 	"require-dev" : {
