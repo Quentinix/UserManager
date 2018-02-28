@@ -30,19 +30,15 @@ class Account extends Config
      * pas suffisament de temps pour confirmer l'inscription de l'utilisateur
      * Retourne true si l'utilisateur a bien été créé
      *
-     * @param string  $user
-     * @param string  $pass
-     * @param string  $email
-     * @param string  $nom
-     * @param string  $prenom
-     * @param string  $adresse
-     * @param string  $ville
-     * @param integer $code_postal
+     * @param string $user
+     * @param string $pass
+     * @param string $email
+     * @param string $perso
      *
      * @throws Exception
      * @return boolean
      */
-    public function accountCreate($user, $pass, $email = null, $nom = null, $prenom = null, $adresse = null, $ville = null, $code_postal = null)
+    public function accountCreate($user, $pass, $email = null, $perso = [])
     {
         if ($user == "") {
             throw new Exception("User n'est pas renseignée.");
@@ -58,9 +54,10 @@ class Account extends Config
         if (mysqli_fetch_array($sqlResult) != null) {
             return false;
         }
+        $perso = json_encode($perso);
         $hash = new Hash;
         $passCrypt = $hash->hashCreate($pass);
-        mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableUser() . "` (`id`, `user`, `pass`, `email`, `nom`, `prenom`, `adresse`, `ville`, `code_postal`) VALUES (NULL, '" . $user . "', '" . $passCrypt . "', '" . $email . "', '" . $nom . "', '" . $prenom . "', '" . $adresse . "', '" . $ville . "', '" . $code_postal . "')");
+        mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableUser() . "` (`id`, `user`, `pass`, `email`, `perso`) VALUES (NULL, '" . $user . "', '" . $passCrypt . "', '" . $email . "', '" . $perso . "')");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -188,105 +185,31 @@ class Account extends Config
      * Retourne true si les modifications sont bien enregistrées
      *
      * @param string $user
-     * @param string $nom
-     * @param string $prenom
      * @param string $email
-     * @param string $cp
-     * @param string $ville
-     * @param string $adresse
+     * @param array  $perso
      *
      * @throws Exception
      * @return boolean
      */
-    public function accountMod($user = "", $nom = "", $prenom = "", $email = "", $cp = "", $ville = "", $adresse = "")
+    public function accountMod($user, $email = NULL, $perso = [])
     {
-        $verif = $this->accountVerif();
-        if ($verif["connect"] == false) {
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT perso, email FROM " . $this->getConfigSqlTableUser() . " WHERE `user` LIKE '" . $user . "'");
+        if (mysqli_errno($this->sqlConnect)) {
+            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        }
+        if ($sqlRow = mysqli_fetch_array($sqlResult) == NULL) {
             return false;
-        }
-        $virgule = 0;
-        if ($user != "") {
-            $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser() . " WHERE `user` LIKE '" . $user . "'");
-            if (mysqli_errno($this->sqlConnect)) {
-                throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-            }
-            if (mysqli_fetch_array($sqlResult) != null) {
-                return false;
-            }
-            $virgule++;
-        }
-        if ($nom != "") {
-            $virgule++;
-        }
-        if ($prenom != "") {
-            $virgule++;
-        }
-        if ($email != "") {
-            $virgule++;
-        }
-        if ($cp != "") {
-            $virgule++;
-        }
-        if ($ville != "") {
-            $virgule++;
-        }
-        if ($adresse != "") {
-            $virgule++;
-        }
-        if ($virgule == 0) {
-            return false;
-        }
-        $sqlQuery = "UPDATE `" . $this->getConfigSqlTableUser() . "` SET ";
-        if ($user != "") {
-            $sqlQuery .= "`user` = '" . $user . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
+        } else {
+            $persoBase = json_decode($sqlRow["perso"]);
+            if ($email === NULL) {
+                $email = $sqlRow["email"];
             }
         }
-        if ($nom != "") {
-            $sqlQuery .= "`nom` = '" . $nom . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
-            }
+        foreach($perso as $key => $value) {
+            $persoBase[$key] = $value;
         }
-        if ($prenom != "") {
-            $sqlQuery .= "`prenom` = '" . $prenom . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
-            }
-        }
-        if ($email != "") {
-            $sqlQuery .= "`email` = '" . $email . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
-            }
-        }
-        if ($cp != "") {
-            $sqlQuery .= "`code_postal` = '" . $cp . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
-            }
-        }
-        if ($ville != "") {
-            $sqlQuery .= "`ville` = '" . $ville . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
-            }
-        }
-        if ($adresse != "") {
-            $sqlQuery .= "`adresse` = '" . $adresse . "'";
-            if ($virgule > 1) {
-                $sqlQuery .= ", ";
-                $virgule--;
-            }
-        }
-        $sqlQuery .= " WHERE `id` = " . $verif["sessionId"];
+        $perso = json_encode($persoBase);
+        $sqlQuery = "UPDATE `" . $this->getConfigSqlTableUser() . "` SET (email, perso) VALUE ('" . $email . "', '" . $perso . "') WHERE `user` LIKE " . $user;
         mysqli_query($this->sqlConnect, $sqlQuery);
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
