@@ -104,15 +104,16 @@ class Account extends Config
 
     /**
      * Permet la connexion de l'utilisateur
-     * Retourne false si le mot de passe est erroné ou si la fonction ne trouve
+     * Retourne 2 si le nombre de tentative est atteint
+     * Retourne 1 si le mot de passe est erroné ou si la fonction ne trouve
      * pas suffisament de temps pour confirmer la connexion de l'utilisateur
-     * Retourne true si l'utilisateur est bien connecté
+     * Retourne 0 si l'utilisateur est bien connecté
      *
      * @param string $user
      * @param string $pass
      *
      * @throws Exception
-     * @return boolean
+     * @return integer
      */
     public function accountConnect($user, $pass)
     {
@@ -123,16 +124,23 @@ class Account extends Config
             throw new Exception("Pass n'est pas renseignée.");
         }
         // $exeTimeBegin = time(); Lien avec le commentaire ligne 171
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user, pass FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user, pass, try FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
         while ($sqlRow = mysqli_fetch_array($sqlResult)) {
+            if ($sqlRow["try"] >= $this->getMaxTry()) {
+                return 2;
+            }
             $passVerif = $sqlRow["pass"];
             $userId = $sqlRow["id"];
         }
         if (! isset($passVerif)) {
-            return false;
+            mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfig() . "` SET `try` = `try` + 1 WHERE `" . $this->getConfig() . "`.`user` LIKE " . $user . ";");
+            if (mysqli_errno($this->sqlConnect)) {
+                throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+            }
+            return 1;
         }
         $hash = new Hash;
         if ($hash->hashVerif($pass, $passVerif)) {
@@ -143,7 +151,7 @@ class Account extends Config
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
-            return true;
+            return 0;
             // while (true) {
             //     $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableSession() . "` WHERE `user_id` LIKE '" . $userId . "'");
             //     if (mysqli_errno($this->sqlConnect)) {
@@ -158,7 +166,7 @@ class Account extends Config
             //     }
             // } partie en test
         }
-        return false;
+        return 1;
     }
 
     /**
