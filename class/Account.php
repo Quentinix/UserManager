@@ -57,7 +57,8 @@ class Account extends Config
         $perso = json_encode($perso);
         $hash = new Hash;
         $passCrypt = $hash->hashCreate($pass);
-        mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableUser() . "` (`id`, `user`, `pass`, `email`, `perso`) VALUES (NULL, '" . $user . "', '" . $passCrypt . "', '" . $email . "', '" . $perso . "')");
+        $user_norm = normalizer_normalize($user);
+        mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableUser() . "` (`id`, `user`, `user_norm`, `pass`, `email`, `perso`) VALUES (NULL, '" . $user . "', '" . $user_norm . "', '" . $passCrypt . "', '" . $email . "', '" . $perso . "')");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -124,7 +125,8 @@ class Account extends Config
             throw new Exception("Pass n'est pas renseignée.");
         }
         // $exeTimeBegin = time(); Lien avec le commentaire ligne 171
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user, pass, try FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "'");
+        $user_norm = normalizer_normalize($user);
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user_norm, pass, try FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user_norm . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
