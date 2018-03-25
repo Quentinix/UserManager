@@ -116,7 +116,7 @@ class Account extends Config
      * @throws Exception
      * @return integer
      */
-    public function accountConnect($user, $pass)
+    public function accountConnect($user, $pass, $loginEver)
     {
         if ($user == "") {
             throw new Exception("User n'est pas renseignée.");
@@ -149,7 +149,7 @@ class Account extends Config
             @session_start();
             session_regenerate_id();
             $expire = time() + $this->getConfigSessionExpire();
-            mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableSession() . "` (`id`, `user_id`, `session_id`,`ip`, `expire`) VALUES (NULL, '" . $userId . "', '" . session_id() . "', '" . $_SERVER["REMOTE_ADDR"] . "', '" . $expire . "')");
+            mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableSession() . "` (`id`, `user_id`, `session_id`,`ip`, `expire`, `loginEver`) VALUES (NULL, '" . $userId . "', '" . session_id() . "', '" . $_SERVER["REMOTE_ADDR"] . "', '" . $expire . "', '" . $loginEver . "')");
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
@@ -290,7 +290,7 @@ class Account extends Config
     public function accountVerif()
     {
         @session_start();
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, user_id, permission, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND expire > " . time() . " AND ip = '" . $_SERVER["REMOTE_ADDR"] . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, user_id, permission, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND (expire > " . time() . " OR loginEver = 1) AND ip = '" . $_SERVER["REMOTE_ADDR"] . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
