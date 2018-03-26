@@ -131,7 +131,7 @@ class Account extends Config
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
         while ($sqlRow = mysqli_fetch_array($sqlResult)) {
-            if ($sqlRow["try"] >= $this->getMaxTry()) {
+            if ($sqlRow["try"] >= $this->getConfigMaxTry()) {
                 return 2;
             }
             $passVerif = $sqlRow["pass"];
