@@ -126,7 +126,7 @@ class Account extends Config
         }
         // $exeTimeBegin = time(); Lien avec le commentaire ligne 171
         $user_norm = normalizer_normalize($user);
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user_norm, pass, try FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user_norm . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user_norm, pass, try, ip_access FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user_norm . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -136,6 +136,10 @@ class Account extends Config
             }
             $passVerif = $sqlRow["pass"];
             $userId = $sqlRow["id"];
+            $ip_access = json_decode($sqlRow["ip_access"]);
+        }
+        if (array_search($_SERVER["REMOTE_ADDR"], $ip_access) !== FALSE) {
+            return 3;
         }
         if (! isset($passVerif)) {
             mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfig() . "` SET `try` = `try` + 1 WHERE `" . $this->getConfig() . "`.`user` LIKE " . $user . ";");
