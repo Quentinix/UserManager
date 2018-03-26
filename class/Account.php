@@ -104,6 +104,33 @@ class Account extends Config
     }
 
     /**
+     *
+     */
+    public function accountUsersList()
+    {
+        $return = [];
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT user FROM " . $this->getConfigSqlTableUser);
+        while ($sqlRow = mysqli_fetch_array($sqlResult)) {
+            $return[] = $sqlRow["user"];
+        }
+        return $return;
+    }
+
+    /**
+     *
+     */
+    public function accountUserDetail($user)
+    {
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT user FROM " . $this->getConfigSqlTableUser . " WHERE `user` LIKE '" . $user . "'");
+        while ($sqlRow = mysqli_fetch_array($sqlResult)) {
+            $return["permission"] = $sqlRow["permission"];
+            $return["email"] = json_decode($sqlRow["ip_access"]);
+            $return["try"] = $sqlRow["try"];
+            $return["perso"] = json_decode($sqlRow["try"]);
+        }
+    }
+
+    /**
      * Permet la connexion de l'utilisateur
      * Retourne 2 si le nombre de tentative est atteint
      * Retourne 1 si le mot de passe est erroné ou si la fonction ne trouve
