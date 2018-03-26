@@ -172,6 +172,14 @@ class Account extends Config
     }
 
     /**
+     * 
+     */
+    public function accountUnblock($user)
+    {
+        mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser . "` SET `try` = '0' WHERE `user` = " . $user);
+    }
+
+    /**
      * Permet déconnexion de l'utilisateur
      * Retourne toujours true si la requête SQL ne possède pas de problème
      *
