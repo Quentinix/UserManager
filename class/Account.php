@@ -350,6 +350,20 @@ class Account extends Config
     }
 
     /**
+     *
+     */
+    public function accountVerifPermReverse($maxPerm)
+    {
+        $verif = $this->accountVerif();
+        if ($verif["connect"] != true) {
+            return false;
+        } elseif ($verif["permission"] <= $maxPerm) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Permet la suppression des sessions expirées dans la base de données
      * Retourne toujours true si la requête SQL est correctement executée
      *
