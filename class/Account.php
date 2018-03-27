@@ -425,7 +425,7 @@ class Account extends Config
         if ($user == "") {
             throw new Exception("User n'est pas renseignée.");
         }
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "' AND `email` LIKE '" . $email . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user . "' AND `email` LIKE '" . $email . "' AND `recovery_time` <= " . time());
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -433,6 +433,10 @@ class Account extends Config
             $uniqid = md5(uniqid()) . md5(uniqid());
             $expire = time() + $this->getConfigRecoveryExpire();
             mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableRecovery() . "` (`id`, `token`, `user_id`, `expire`) VALUES (NULL, '" . $uniqid . "', '" . $sqlRow["id"] . "', '" . $expire . "')");
+            if (mysqli_errno($this->sqlConnect)) {
+                throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+            }
+            mysqli_query($sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `recovery_time` = '" . time() + $this->getConfigRecoveryRetry . "' WHERE `user` = '" . $user ."'");
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
@@ -466,5 +470,20 @@ class Account extends Config
             return $sqlRow["user"];
         }
         return null;
+    }
+
+    /**
+     *
+     */
+    public function accountRecoveryReset($user)
+    {
+        mysqli_query($sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `recovery_time` = '0' WHERE `user` = '" . $user ."'");
+        if (mysqli_errno($this->sqlConnect)) {
+            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        }
+        if (mysqli_affected_rows($this->sqlConnect) >= 1) {
+            return true;
+        }
+        return false;
     }
 }
