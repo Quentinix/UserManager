@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="Package Test Suite">
-            <file>WaveTest.php</file>
+            <directory suffix=".php">./PHPUnit/</directory>
         </testsuite>
     </testsuites>
     <logging>
@@ -24,6 +24,7 @@
             <directory suffix=".php">.</directory>
             <exclude>
                 <directory suffix=".php">./vendor/</directory>
+                <directory suffix=".php">./PHPUnit/</directory>
                 <file>./WaveTest.php</file>
                 <file>./ComposerInstall.php</file>
             </exclude>
