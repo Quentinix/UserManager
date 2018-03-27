@@ -19,7 +19,8 @@ class Account extends Config
     /**
      * Appel de la connexion à la base de données
      */
-    public function __construct() {
+    public function __construct()
+    {
         $sqlClass = new Sql;
         $this->sqlConnect = $sqlClass->getSqlConnect();
     }
@@ -165,7 +166,7 @@ class Account extends Config
             $userId = $sqlRow["id"];
             $ip_access = json_decode($sqlRow["ip_access"]);
         }
-        if (array_search($_SERVER["REMOTE_ADDR"], $ip_access) !== FALSE) {
+        if (array_search($_SERVER["REMOTE_ADDR"], $ip_access) !== false) {
             return 3;
         }
         if (! isset($passVerif)) {
@@ -203,7 +204,7 @@ class Account extends Config
     }
 
     /**
-     * 
+     *
      */
     public function accountUnblock($user)
     {
@@ -240,21 +241,21 @@ class Account extends Config
      * @throws Exception
      * @return boolean
      */
-    public function accountMod($user, $email = NULL, $perso = [])
+    public function accountMod($user, $email = null, $perso = [])
     {
         $sqlResult = mysqli_query($this->sqlConnect, "SELECT perso, email FROM " . $this->getConfigSqlTableUser() . " WHERE `user` LIKE '" . $user . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
-        if ($sqlRow = mysqli_fetch_array($sqlResult) == NULL) {
+        if ($sqlRow = mysqli_fetch_array($sqlResult) == null) {
             return false;
         } else {
             $persoBase = json_decode($sqlRow["perso"]);
-            if ($email === NULL) {
+            if ($email === null) {
                 $email = $sqlRow["email"];
             }
         }
-        foreach($perso as $key => $value) {
+        foreach ($perso as $key => $value) {
             $persoBase[$key] = $value;
         }
         $perso = json_encode($persoBase);
