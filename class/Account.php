@@ -467,16 +467,4 @@ class Account extends Config
         }
         return null;
     }
-
-    /**
-     * Permet l'ajout d'un label à un niveau de permission
-     * Retourne false si un label existe déjà sur le niveau de permission choisi
-     * Retourn true si le label est bien attribué au niveau de permission
-     *
-     * @param integer $level
-     * @param string  $name
-     *
-     * @throws Exception
-     * @return boolean
-     */
 }
