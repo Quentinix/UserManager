@@ -19,6 +19,7 @@ class Config
     private $configSqlTableSession = "um_session";
     private $configSqlTableRecovery = "um_recovery";
     private $configSqlTablePermlabel = "um_permlabel";
+    private $configSessionSelect = 3;
     private $configSessionExpire = 86400;
     private $configRecoveryExpire = 900;
     private $configRecoveryRetry = 3600;
@@ -58,6 +59,11 @@ class Config
     public function getConfigSqlTablePermlabel()
     {
         return $this->configSqlTablePermlabel;
+    }
+
+    public function getConfigSessionSelect()
+    {
+        return $this->configSessionSelect;
     }
 
     public function getConfigSessionExpire()

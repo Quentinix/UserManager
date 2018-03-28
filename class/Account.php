@@ -154,7 +154,15 @@ class Account extends Config
         }
         // $exeTimeBegin = time(); Lien avec le commentaire ligne 171
         $user_norm = normalizer_normalize($user);
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, user_norm, pass, try, ip_access FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user` LIKE '" . $user_norm . "'");
+        if ($this->getConfigSessionSelect == 3) {
+            $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, pass, try, ip_access FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user_norm` LIKE '" . $user_norm . "' OR `email` LIKE '" . $user . "'");
+        } elseif ($this->getConfigSessionSelect == 2) {
+            $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, pass, try, ip_access FROM `" . $this->getConfigSqlTableUser() . "` WHERE `email` LIKE '" . $user . "'");
+        } elseif ($this->getConfigSessionSelect == 1) {
+            $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, pass, try, ip_access FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user_norm` LIKE '" . $user_norm . "'");
+        } else {
+            throw new Exception("configSessionSelect ne possède pas la bonne configuration, Executer à nouveau 'composer run-script config' dans le dossier 'vendor/quentinix/wave/'."); // TODO : trouver erreur !
+        }
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -170,7 +178,7 @@ class Account extends Config
             return 3;
         }
         if (! isset($passVerif)) {
-            mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfig() . "` SET `try` = `try` + 1 WHERE `" . $this->getConfig() . "`.`user` LIKE " . $user . ";");
+            mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `try` = `try` + 1 WHERE `" . $this->getConfigSqlTableUser() . "`.`user_norm` LIKE " . $user_norm . ";");
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
