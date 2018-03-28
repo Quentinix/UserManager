@@ -19,7 +19,8 @@ class Permission extends Config
     /**
      * Appel de la connexion à la base de données
      */
-    public function __construct() {
+    public function __construct()
+    {
         $sqlClass = new Sql;
         $this->sqlConnect = $sqlClass->getSqlConnect();
     }
