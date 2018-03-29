@@ -48,17 +48,21 @@ class Account extends Config
             throw new Exception("Pass n'est pas renseignée.");
         }
         // $exeTimeBegin = time(); Lien avec le commentaire ligne 90
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser() . " WHERE `user` LIKE '" . $user . "'");
+        $user_norm = normalizer_normalize($user);
+        if ($email === null) {
+            $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser() . " WHERE `user_norm` LIKE '" . $user_norm . "'");
+        } else {
+            $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser() . " WHERE `user_norm` LIKE '" . $user_norm . "' OR `email` LIKE '" . $email . "'");
+        }
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
-        if (mysqli_fetch_array($sqlResult) != null) {
+        if (mysqli_fetch_array($sqlResult) !== null) {
             return false;
         }
         $perso = json_encode($perso);
         $hash = new Hash;
         $passCrypt = $hash->hashCreate($pass);
-        $user_norm = normalizer_normalize($user);
         mysqli_query($this->sqlConnect, "INSERT INTO `" . $this->getConfigSqlTableUser() . "` (`id`, `user`, `user_norm`, `pass`, `email`, `perso`) VALUES (NULL, '" . $user . "', '" . $user_norm . "', '" . $passCrypt . "', '" . $email . "', '" . $perso . "')");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
@@ -251,11 +255,12 @@ class Account extends Config
      */
     public function accountMod($user, $email = null, $perso = [])
     {
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT perso, email FROM " . $this->getConfigSqlTableUser() . " WHERE `user` LIKE '" . $user . "'");
+        $user_norm = normalizer_normalize($user);
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT perso, email FROM " . $this->getConfigSqlTableUser() . " WHERE `user_norm` LIKE '" . $user_norm . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
-        if ($sqlRow = mysqli_fetch_array($sqlResult) == null) {
+        if ($sqlRow = mysqli_fetch_array($sqlResult) === null) {
             return false;
         } else {
             $persoBase = json_decode($sqlRow["perso"]);
@@ -267,7 +272,7 @@ class Account extends Config
             $persoBase[$key] = $value;
         }
         $perso = json_encode($persoBase);
-        $sqlQuery = "UPDATE `" . $this->getConfigSqlTableUser() . "` SET (email, perso) VALUE ('" . $email . "', '" . $perso . "') WHERE `user` LIKE " . $user;
+        $sqlQuery = "UPDATE `" . $this->getConfigSqlTableUser() . "` SET (email, perso) VALUE ('" . $email . "', '" . $perso . "') WHERE `user_norm` LIKE " . $user_norm;
         mysqli_query($this->sqlConnect, $sqlQuery);
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
