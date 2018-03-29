@@ -161,7 +161,7 @@ class Account extends Config
         } elseif ($this->getConfigSessionSelect == 1) {
             $sqlResult = mysqli_query($this->sqlConnect, "SELECT id, pass, try, ip_access FROM `" . $this->getConfigSqlTableUser() . "` WHERE `user_norm` LIKE '" . $user_norm . "'");
         } else {
-            throw new Exception("configSessionSelect ne possède pas la bonne configuration, Executer à nouveau 'composer run-script config' dans le dossier 'vendor/quentinix/wave/'."); // TODO : trouver erreur !
+            throw new Exception("configSessionSelect ne possède pas la bonne configuration, Executer à nouveau 'composer run-script config' dans le dossier 'vendor/quentinix/wave/'.");
         }
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
