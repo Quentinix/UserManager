@@ -30,7 +30,15 @@ class Wave extends Config
      */
     public function version()
     {
-        return "1.3.0-dev";
+        if (file_exists("../composer.json")) {
+            $composerFile = file_get_contents("../composer.json");
+        } elseif (file_exists("vendor/quentinix/wave/composer.json")) {
+            $composerFile = file_get_contents("vendor/quentinix/wave/composer.json");
+        } else {
+            return "composer.json introuvable !";
+        }
+        $composer = json_decode($composerFile);
+        return $composer->version;
     }
 
     /**
