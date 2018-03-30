@@ -117,6 +117,9 @@ COMMIT;
         );
         echo " OK !\r\n";
         echo "Modification de la configuration de Config.php...";
+        if (! file_exists("class/Config.php")) {
+            copy("class/Config.dist.php", "class/Config.php");
+        }
         $fichierConfig = file("class/Config.php");
         $fichierConfig[13] = '    private $configSqlHost = "' . $host . '";' . "\r\n";
         $fichierConfig[14] = '    private $configSqlUser = "' . $user . '";' . "\r\n";
@@ -142,6 +145,9 @@ COMMIT;
     {
         echo "Execution TravisConfig...\r\n";
         echo "Lecture Config.php...\r\n";
+        if (! file_exists("class/Config.php")) {
+            copy("class/Config.dist.php", "class/Config.php");
+        }
         $fichierConfig = file("class/Config.php");
         echo "Modification de la configuration de Config.php...\r\n";
         $fichierConfig[13] = '    private $configSqlHost = "127.0.0.1";' . "\r\n";
