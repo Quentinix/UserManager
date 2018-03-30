@@ -197,6 +197,10 @@ class Account extends Config
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
+            mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `try` = 0 WHERE `" . $this->getConfigSqlTableUser() . "`.`user_norm` LIKE " . $user_norm . ";");
+            if (mysqli_errno($this->sqlConnect)) {
+                throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+            }
             return 0;
             // while (true) {
             //     $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM `" . $this->getConfigSqlTableSession() . "` WHERE `user_id` LIKE '" . $userId . "'");
