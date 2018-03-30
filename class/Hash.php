@@ -27,16 +27,11 @@ class Hash extends Config
         if ($mdp == "") {
             throw new Exception("Mdp n'est pas renseignée.");
         }
-        $seed = explode("-", $this->getConfigSeed());
-        $mdpHash = hash("sha256", $mdp);
         $seedRand = "";
         for ($i = 1; $i <= 128; $i++) {
             $seedRand .= mt_rand(0, 9);
         }
-        $mdpHash = hash("sha256", $mdpHash . $seedRand);
-        $mdpSplit = str_split($mdpHash);
-        $this->hashEncodeAlpha(64, $seed, $mdpSplit);
-        $mdpHash = $seedRand . implode("", $mdpSplit);
+        $mdpHash = $seedRand . hexdec(hash("sha256", $mdp . $seedRand));
         return $mdpHash;
     }
 
@@ -58,40 +53,11 @@ class Hash extends Config
         if ($mdpVerif == "") {
             throw new Exception("MdpVerif n'est pas renseignée.");
         }
-        $seed = explode("-", $this->getConfigSeed());
-        $mdpHash = hash("sha256", $mdp);
-        $seedRand = substr($mdpVerif, 0, 128);
-        $mdpHash = hash("sha256", $mdpHash . $seedRand);
-        $mdpSplit = str_split($mdpHash);
-        $this->hashEncodeAlpha(64, $seed, $mdpSplit);
-        $mdpHash = $seedRand . implode("", $mdpSplit);
+        $seedVerif = substr($mdpVerif, 0, 128);
+        $mdpHash = $seedVerif . hexdec(hash("sha256", $mdp . $seedverif));
         if ($mdpVerif === $mdpHash) {
             return true;
         }
-            return false;
-    }
-
-    public function hashEncodeAlpha($number, $seed, &$mdpSplit)
-    {
-        for ($i = 0; $i < $number; $i++) {
-            if ($mdpSplit[$i] == "a") {
-                $mdpSplit[$i] = $seed[0];
-            }
-            if ($mdpSplit[$i] == "b") {
-                $mdpSplit[$i] = $seed[1];
-            }
-            if ($mdpSplit[$i] == "c") {
-                $mdpSplit[$i] = $seed[2];
-            }
-            if ($mdpSplit[$i] == "d") {
-                $mdpSplit[$i] = $seed[3];
-            }
-            if ($mdpSplit[$i] == "e") {
-                $mdpSplit[$i] = $seed[4];
-            }
-            if ($mdpSplit[$i] == "f") {
-                $mdpSplit[$i] = $seed[5];
-            }
-        }
+        return false;
     }
 }
