@@ -3,9 +3,6 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS "[[sqlDb]]";
-USE "[[sqlDb]]";
-
 CREATE TABLE IF NOT EXISTS `[[sqlTablePermlabel]]` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `level` int(255) NOT NULL,
