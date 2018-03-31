@@ -1,7 +1,7 @@
 # Visual Studio code
 .vscode
 
-.configOK
+/class/Config.php
 .php_cs.cache
 /vendor/
 /build/*

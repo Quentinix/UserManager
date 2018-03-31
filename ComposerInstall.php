@@ -26,17 +26,6 @@ class ComposerInstall
         $sessionExpire = $event->getIO()->ask("La session du compte utilisateur expire en seconde(86400 '1 jour') : ", 86400);
         $recoveryExpire = $event->getIO()->ask("Le jeton de récupération du compte utilisateur expire en seconde(900 '15 minutes') : ", 900);
         $recoveryRetry = $event->getIO()->ask("L'utilisateur peut retenter la récupération du mot de passe en seconde(3600 '1 heure') : ", 3600);
-        echo "Création de la base de données et des tables...";
-        $sqlConnect = mysqli_connect($host, $user, $pass, null, $port);
-        mysqli_multi_query(
-            $sqlConnect,
-            "
-                CREATE DATABASE IF NOT EXISTS `" . $db . "` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-                USE `" . $db . "`;
-            "
-        );
-        mysqli_multi_query($sqlConnect, file_get_contents("build/script/wave.sql"));
-        echo " OK !\r\n";
         echo "Modification de la configuration de Config.php...";
         if (! file_exists("class/Config.php")) {
             copy("class/Config.dist.php", "class/Config.php");
@@ -52,12 +41,15 @@ class ComposerInstall
         $fichierConfig[24] = '    private $configRecoveryRetry = ' . $recoveryRetry . ';' . "\r\n";
         $fichierConfig[25] = '    private $configMaxTry = "' . $maxTry . '";' . "\r\n";
         file_put_contents('class/Config.php', implode('', $fichierConfig));
-        echo "Ecriture du fichier .ConfigOK...\r\n";
-        touch(".ConfigOK");
+        echo "Création des tables de la base de données...";
+        $sqlConnect = mysqli_connect($host, $user, $pass, $db, $port);
+        $sqlFile = file_get_contents("build/script/wave.sql");
+        $sqlFile = str_replace(self::sqlReplaceConfig("search"), self::sqlReplaceConfig("replace"), $sqlFile);
+        mysqli_multi_query($sqlConnect, $sqlFile);
         echo " OK !\r\n";
     }
 
-    public function travisConfig()
+    public static function travisConfig()
     {
         echo "Execution TravisConfig...\r\n";
         echo "Lecture Config.php...\r\n";
@@ -77,8 +69,35 @@ class ComposerInstall
         $fichierConfig[25] = '    private $configMaxTry = 5;' . "\r\n";
         echo "Réécriture de la configuration de Config.php...\r\n";
         file_put_contents('class/Config.php', implode('', $fichierConfig));
-        echo "Ecriture du fichier .ConfigOK...\r\n";
-        touch(".ConfigOK");
+        echo "Création des tables de la base de données...";
+        $sqlConnect = mysqli_connect($host, $user, $pass, $db, $port);
+        $sqlFile = file_get_contents("build/script/wave.sql");
+        $sqlFile = str_replace(self::sqlReplaceConfig("search"), self::sqlReplaceConfig("replace"), $sqlFile);
+        mysqli_multi_query($sqlConnect, $sqlFile);
+        echo " OK !\r\n";
         echo "Execution terminée !\r\n";
+    }
+
+    private static function sqlReplaceConfig($option)
+    {
+        if ($option == "search") {
+            return [
+                "[[sqlTableUser]]",
+                "[[sqlTableSession]]",
+                "[[sqlTableRecovery]]",
+                "[[sqlTablePermLabel]]",
+            ];
+        } elseif ($option == "replace") {
+            spl_autoload_register(function () {
+                include "class/Config.php";
+            });
+            $config = new Config;
+            return [
+                $config->getConfigSqlTableUser,
+                $config->getConfigSqlTableSession,
+                $config->getConfigSqlTableRecovery,
+                $config->getConfigSqlTablePermLabel,
+            ];
+        }
     }
 }
