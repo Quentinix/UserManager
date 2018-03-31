@@ -63,9 +63,9 @@ class ComposerInstall
         $fichierConfig[15] = '    private $configSqlPass = "";' . "\r\n";
         $fichierConfig[16] = '    private $configSqlDb = "wave_travis";' . "\r\n";
         $fichierConfig[21] = '    private $configSessionSelect = 3;' . "\r\n";
-        $fichierConfig[22] = '    private $configSessionExpire = 3600;' . "\r\n";
-        $fichierConfig[23] = '    private $configRecoveryExpire = 3600;' . "\r\n";
-        $fichierConfig[24] = '    private $configRecoveryRetry = ' . $recoveryRetry . ';' . "\r\n";
+        $fichierConfig[22] = '    private $configSessionExpire = 86400;' . "\r\n";
+        $fichierConfig[23] = '    private $configRecoveryExpire = 900;' . "\r\n";
+        $fichierConfig[24] = '    private $configRecoveryRetry = 3600' . "\r\n";
         $fichierConfig[25] = '    private $configMaxTry = 5;' . "\r\n";
         echo "Réécriture de la configuration de Config.php...\r\n";
         file_put_contents('class/Config.php', implode('', $fichierConfig));
