@@ -1,2 +1,2 @@
-CREATE DATABASE "wave_ci";
-USE "wave_ci";
+CREATE DATABASE wave_ci;
+USE wave_ci;
