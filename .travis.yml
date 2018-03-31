@@ -11,6 +11,7 @@ notifications:
 
 before_script:
   - curl -s http://getcomposer.org/installer | php
+  - mysql -u root < build/script/wave_ci.sql
   - php composer.phar install
   - php composer.phar run-script travisConfig
 
