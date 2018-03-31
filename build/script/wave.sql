@@ -3,16 +3,17 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-DROP TABLE IF EXISTS `um_permlabel`;
-CREATE TABLE IF NOT EXISTS `um_permlabel` (
+CREATE DATABASE IF NOT EXISTS "[[sqlDb]]";
+USE "[[sqlDb]]";
+
+CREATE TABLE IF NOT EXISTS `[[sqlTablePermlabel]]` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `level` int(255) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `um_recovery`;
-CREATE TABLE IF NOT EXISTS `um_recovery` (
+CREATE TABLE IF NOT EXISTS `[[sqlTableRecovery]]` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `token` varchar(100) NOT NULL,
   `user_id` int(255) NOT NULL,
@@ -21,8 +22,7 @@ CREATE TABLE IF NOT EXISTS `um_recovery` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `um_session`;
-CREATE TABLE IF NOT EXISTS `um_session` (
+CREATE TABLE IF NOT EXISTS `[[sqlTableSession]]` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `user_id` int(255) NOT NULL,
   `session_id` varchar(100) NOT NULL,
@@ -33,8 +33,7 @@ CREATE TABLE IF NOT EXISTS `um_session` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `um_user`;
-CREATE TABLE IF NOT EXISTS `um_user` (
+CREATE TABLE IF NOT EXISTS `[[sqlTableUser]]` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `user` varchar(100) NOT NULL,
   `user_norm` varchar(255) NOT NULL,
@@ -49,9 +48,9 @@ CREATE TABLE IF NOT EXISTS `um_user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `um_recovery`
-  ADD CONSTRAINT `um_recovery_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `um_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `[[sqlTableRecovery]]`
+  ADD CONSTRAINT `[[sqlTableRecovery]]_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `[[sqlTableUser]]` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `um_session`
-  ADD CONSTRAINT `um_session_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `um_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `[[sqlTableSession]]`
+  ADD CONSTRAINT `[[sqlTableSession]]_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `[[sqlTableUser]]` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
