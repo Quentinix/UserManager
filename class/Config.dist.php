@@ -23,7 +23,6 @@ class Config
     private $configSessionExpire = 86400;
     private $configRecoveryExpire = 900;
     private $configRecoveryRetry = 3600;
-    private $configSeed = "99861-13858-22054-43819-72808-38016";
     private $configMaxTry = 5;
 
     public function getConfigSqlHost()
@@ -84,11 +83,6 @@ class Config
     public function getConfigSqlTableRecovery()
     {
         return $this->configSqlTableRecovery;
-    }
-
-    public function getConfigSeed()
-    {
-        return $this->configSeed;
     }
 
     public function getConfigMaxTry()
