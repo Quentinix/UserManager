@@ -70,7 +70,7 @@ class ComposerInstall
         echo "Réécriture de la configuration de Config.php...\r\n";
         file_put_contents('class/Config.php', implode('', $fichierConfig));
         echo "Création des tables de la base de données...";
-        $sqlConnect = mysqli_connect($host, $user, $pass, $db, $port);
+        $sqlConnect = mysqli_connect("localhost", "root", "", "wave_travis");
         $sqlFile = file_get_contents("build/script/wave.sql");
         $sqlFile = str_replace(self::sqlReplaceConfig("search"), self::sqlReplaceConfig("replace"), $sqlFile);
         mysqli_multi_query($sqlConnect, $sqlFile);
