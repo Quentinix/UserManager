@@ -51,13 +51,14 @@ class ComposerInstall
 
     public static function travisConfig()
     {
-        echo "Execution TravisConfig...\r\n";
-        echo "Lecture Config.php...\r\n";
+        echo "[Execution TravisConfig]...\r\n";
+        echo "Lecture Config.php..";
         if (! file_exists("class/Config.php")) {
             copy("class/Config.dist.php", "class/Config.php");
         }
+        echo " OK !\r\n";
         $fichierConfig = file("class/Config.php");
-        echo "Modification de la configuration de Config.php...\r\n";
+        echo "Modification de la configuration de Config.php...";
         $fichierConfig[13] = '    private $configSqlHost = "127.0.0.1";' . "\r\n";
         $fichierConfig[14] = '    private $configSqlUser = "root";' . "\r\n";
         $fichierConfig[15] = '    private $configSqlPass = "";' . "\r\n";
@@ -65,17 +66,19 @@ class ComposerInstall
         $fichierConfig[21] = '    private $configSessionSelect = 3;' . "\r\n";
         $fichierConfig[22] = '    private $configSessionExpire = 86400;' . "\r\n";
         $fichierConfig[23] = '    private $configRecoveryExpire = 900;' . "\r\n";
-        $fichierConfig[24] = '    private $configRecoveryRetry = 3600' . "\r\n";
+        $fichierConfig[24] = '    private $configRecoveryRetry = 3600;' . "\r\n";
         $fichierConfig[25] = '    private $configMaxTry = 5;' . "\r\n";
-        echo "Réécriture de la configuration de Config.php...\r\n";
+        echo " OK !\r\n";
+        echo "Réécriture de la configuration de Config.php...";
         file_put_contents('class/Config.php', implode('', $fichierConfig));
+        echo " OK !\r\n";
         echo "Création des tables de la base de données...";
         $sqlConnect = mysqli_connect("localhost", "root", "", "wave_ci");
         $sqlFile = file_get_contents("build/script/wave.sql");
         $sqlFile = str_replace(self::sqlReplaceConfig("search"), self::sqlReplaceConfig("replace"), $sqlFile);
         mysqli_multi_query($sqlConnect, $sqlFile);
         echo " OK !\r\n";
-        echo "Execution terminée !\r\n";
+        echo "[Execution terminée !]\r\n";
     }
 
     private static function sqlReplaceConfig($option)
@@ -89,14 +92,14 @@ class ComposerInstall
             ];
         } elseif ($option == "replace") {
             spl_autoload_register(function () {
-                include "class/Config.php";
+                include_once "./class/Config.php";
             });
-            $config = new Config;
+            $config = new \Wave\Config;
             return [
-                $config->getConfigSqlTableUser,
-                $config->getConfigSqlTableSession,
-                $config->getConfigSqlTableRecovery,
-                $config->getConfigSqlTablePermLabel,
+                $config->getConfigSqlTableUser(),
+                $config->getConfigSqlTableSession(),
+                $config->getConfigSqlTableRecovery(),
+                $config->getConfigSqlTablePermLabel(),
             ];
         }
     }

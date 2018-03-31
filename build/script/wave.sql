@@ -3,7 +3,7 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE TABLE IF NOT EXISTS `[[sqlTablePermlabel]]` (
+CREATE TABLE IF NOT EXISTS `[[sqlTablePermLabel]]` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `level` int(255) NOT NULL,
   `name` varchar(128) NOT NULL,
