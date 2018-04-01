@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `[[sqlTableSession]]` (
   `session_id` varchar(100) NOT NULL,
   `ip` varchar(20) NOT NULL,
   `expire` int(11) NOT NULL,
-  `loginEver` tinyint(1) NOT NULL DEFAULT 0,
+  `login_ever` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

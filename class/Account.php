@@ -126,12 +126,20 @@ class Account extends Config
      */
     public function accountUserDetail($user)
     {
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT user FROM " . $this->getConfigSqlTableUser . " WHERE `user` LIKE '" . $user . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser . " WHERE `user` LIKE '" . $user . "'");
         while ($sqlRow = mysqli_fetch_array($sqlResult)) {
+            $return["user"] = $sqlRow["user"];
+            $return["user_norm"] = $sqlRow["user_norm"];
             $return["permission"] = $sqlRow["permission"];
-            $return["email"] = json_decode($sqlRow["ip_access"]);
-            $return["try"] = $sqlRow["try"];
-            $return["perso"] = json_decode($sqlRow["try"]);
+            $return["email"] = $sqlRow["email"];
+            $return["ip_access"] = json_decode($sqlRow["ip_access"]);
+            $return["Recovery_time"] = $sqlRow["Recovery_time"];
+            $return["perso"] = json_decode($sqlRow["perso"]);
+        }
+        if (isset($return)) {
+            return $return;
+        } else {
+            return null;
         }
     }
 
@@ -347,7 +355,7 @@ class Account extends Config
     public function accountVerif()
     {
         @session_start();
-        $sqlResult = mysqli_query($this->sqlConnect, "SELECT " . $this->getConfigSqlTableUser() . ".user, user_id, permission, expire, " . $this->getConfigSqlTableUser() . ".id, email, nom, prenom, adresse, ville, code_postal FROM `" . $this->getConfigSqlTableSession() . "` JOIN `" . $this->getConfigSqlTableUser() . "` ON " . $this->getConfigSqlTableSession() . ".user_id = " . $this->getConfigSqlTableUser() . ".id WHERE session_id = '" . session_id() . "' AND (expire > " . time() . " OR loginEver = 1) AND ip = '" . $_SERVER["REMOTE_ADDR"] . "'");
+        $sqlResult = mysqli_query($this->sqlConnect, "SELECT user, permission, email, ip_access, try, recovery_time, perso, session_id, ip, expire, login_ever FROM `" . $this->getConfigSqlTableUser . "` JOIN " . $this->getConfigSqlTableSession . " ON " . $this->getConfigSqlTableUser . ".id LIKE " . $this->getConfigSqlTableSession . ".user_id WHERE session_id = " . session_id() . " AND (expire > " . time() . " OR loginEver = 1) AND ip = '" . $_SERVER["REMOTE_ADDR"] . "'");
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
@@ -356,15 +364,15 @@ class Account extends Config
                 "connect" => true,
                 "user" => $sqlRow["user"],
                 "permission" => $sqlRow["permission"],
-                "expire" => $sqlRow["expire"],
-                "sessionId" => $sqlRow["id"],
-                "userId" => $sqlRow["user_id"],
                 "email" => $sqlRow["email"],
-                "nom" => $sqlRow["nom"],
-                "prenom" => $sqlRow["prenom"],
-                "adresse" => $sqlRow["adresse"],
-                "ville" => $sqlRow["ville"],
-                "code_postal" => $sqlRow["code_postal"]
+                "ip_access" => json_decode($sqlRow["ip_access"]),
+                "try" => $sqlRow["try"],
+                "recovery_time" => $sqlRow["recovery_time"],
+                "perso" => json_decode($sqlRow["perso"]),
+                "session_id" => $sqlRow["session_id"],
+                "ip" => $sqlRow["ip"],
+                "expire" => $sqlRow["expire"],
+                "login_ever" => $sqlRow["login_ever"],
             );
         }
         return array(
