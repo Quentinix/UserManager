@@ -16,14 +16,6 @@ class Wave extends Config
     private $sqlConnect;
 
     /**
-     * Déconnexion de la base de données
-     */
-    public function __destruct()
-    {
-        mysqli_close($this->sqlConnect);
-    }
-
-    /**
      * Retourne la version de la bibliothèque
      *
      * @return string
