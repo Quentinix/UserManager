@@ -42,8 +42,10 @@ CREATE TABLE IF NOT EXISTS `[[sqlTableUser]]` (
   `recovery_time` int(255) NOT NULL DEFAULT 0,
   `perso` longtext NOT NULL DEFAULT '[]',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `user_norm` (`user_norm`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 ALTER TABLE `[[sqlTableRecovery]]`
   ADD CONSTRAINT `[[sqlTableRecovery]]_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `[[sqlTableUser]]` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
