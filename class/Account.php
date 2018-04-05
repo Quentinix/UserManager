@@ -274,15 +274,15 @@ class Account extends Config
      * @throws Exception
      * @return boolean
      */
-    public function accountModMdp($mdp)
+    public function accountModMdp($user, $mdp)
     {
-        $verif = $this->accountVerif();
-        if ($verif["connect"] == false) {
-            return false;
-        }
+        $userNorm = normalizer_normalize($user);
         $hash = new Hash;
         $mdpHash = $hash->hashCreate($mdp);
-        mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `pass` = '" . $mdpHash . "' WHERE `id` = " . $verif["userId"]);
+        mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `pass` = '" . $mdpHash . "' WHERE `user_norm` = " . $userNorm);
+        if (mysqli_affected_rows($this->sqlConnect) !== 1) {
+            return false;
+        }
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
