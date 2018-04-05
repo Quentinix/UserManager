@@ -22,8 +22,8 @@ class Wave extends Config
      */
     public function version()
     {
-        if (file_exists("../composer.json")) {
-            $composerFile = file_get_contents("../composer.json");
+        if (file_exists("composer.json")) {
+            $composerFile = file_get_contents("composer.json");
         } elseif (file_exists("vendor/quentinix/wave/composer.json")) {
             $composerFile = file_get_contents("vendor/quentinix/wave/composer.json");
         } else {
