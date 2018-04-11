@@ -16,7 +16,7 @@ class CreatePassword extends Config
     /**
      * Permet la création d'un mot de passe facile à retenir
      *
-     * @return string
+     * @return String
      */
     public function createPassword()
     {

@@ -6,7 +6,7 @@ namespace Wave;
 use Exception;
 
 /**
- * Classe Hash
+ * Classe de l'algorithme de hash
  *
  * @package  Wave
  * @author   Quentinix <git@quentinix.fr>
@@ -17,10 +17,10 @@ class Hash extends Config
      * Permet le hashage d'une chaine de caractères et plus particulèrement du
      * mot de passe lors de la création ou de la modification du compte.
      *
-     * @param string $mdp
+     * @param String $mdp
      *
      * @throws Exception
-     * @return string
+     * @return String
      */
     public function hashCreate($mdp)
     {
@@ -39,11 +39,11 @@ class Hash extends Config
      * Permet la vérification entre le hashage et le mot de passe renseigné lors
      * de la connexion
      *
-     * @param string $mdp
-     * @param string $mdpVerif
+     * @param String $mdp
+     * @param String $mdpVerif
      *
      * @throws Exception
-     * @return boolean
+     * @return Boolean
      */
     public function hashVerif($mdp, $mdpVerif)
     {
