@@ -8,8 +8,8 @@ use Exception;
 /**
  * Classe de la gestion des comptes
  *
- * @package  Wave
- * @author   Quentinix <git@quentinix.fr>
+ * @package Wave
+ * @author  Quentinix <git@quentinix.fr>
  */
 class Account extends Config
 {
@@ -27,14 +27,13 @@ class Account extends Config
 
     /**
      * Permet la création d'un nouveau utilisateur
-     * Retourne false si l'utilisateur existe déjà ou si la fonction ne trouve
-     * pas suffisament de temps pour confirmer l'inscription de l'utilisateur
+     * Retourne false si l'utilisateur existe déjà
      * Retourne true si l'utilisateur a bien été créé
      *
-     * @param string $user
-     * @param string $pass
-     * @param string $email
-     * @param string $perso
+     * @param String $user
+     * @param String $pass
+     * @param String $email
+     * @param Array  $perso
      *
      * @throws Exception
      * @return boolean
@@ -74,10 +73,10 @@ class Account extends Config
      * Retourne false si le compte a pas été supprimé
      * Retourne true si le compte a été supprimé
      *
-     * @param String $user
+     * @param  String $user
      *
      * @throws Exception
-     * @return boolean
+     * @return Boolean
      */
     public function accountDelete($user)
     {
@@ -95,12 +94,18 @@ class Account extends Config
     }
 
     /**
-     *
+     * Retourne la liste des utilisateurs
+     * 
+     * @throws Exception
+     * @return Array
      */
     public function accountUsersList()
     {
         $return = [];
         $sqlResult = mysqli_query($this->sqlConnect, "SELECT user FROM " . $this->getConfigSqlTableUser);
+        if (mysqli_errno($this->sqlConnect)) {
+            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        }
         while ($sqlRow = mysqli_fetch_array($sqlResult)) {
             $return[] = $sqlRow["user"];
         }
@@ -108,11 +113,21 @@ class Account extends Config
     }
 
     /**
-     *
+     * Retourne le détail de l'utilisateur mis en paramètre
+     * Si l'utilisateur n'existe pas, alors Null est retourné
+     * Si l'utilisateur existe, alors un tableau avec le détail de l'utilisateur est retourné
+     * 
+     * @param  String $user
+     * 
+     * @throws Exception
+     * @return Null|Array
      */
     public function accountUserDetail($user)
     {
         $sqlResult = mysqli_query($this->sqlConnect, "SELECT * FROM " . $this->getConfigSqlTableUser . " WHERE `user` LIKE '" . $user . "'");
+        if (mysqli_errno($this->sqlConnect)) {
+            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        }
         while ($sqlRow = mysqli_fetch_array($sqlResult)) {
             $return["user"] = $sqlRow["user"];
             $return["user_norm"] = $sqlRow["user_norm"];
@@ -131,16 +146,16 @@ class Account extends Config
 
     /**
      * Permet la connexion de l'utilisateur
-     * Retourne 2 si le nombre de tentative est atteint
-     * Retourne 1 si le mot de passe est erroné ou si la fonction ne trouve
-     * pas suffisament de temps pour confirmer la connexion de l'utilisateur
      * Retourne 0 si l'utilisateur est bien connecté
+     * Retourne 2 si l'utilisateur n'existe pas
+     * Retourne 3 si l'ip de l'utilisateur n'est pas permit
+     * Retourne 4 si l'utilisateur à trop d'essais
      *
-     * @param string $user
-     * @param string $pass
+     * @param String $user
+     * @param String $pass
      *
      * @throws Exception
-     * @return integer
+     * @return Integer
      */
     public function accountConnect($user, $pass, $loginEver)
     {
@@ -165,21 +180,17 @@ class Account extends Config
         }
         while ($sqlRow = mysqli_fetch_array($sqlResult)) {
             if ($sqlRow["try"] >= $this->getConfigMaxTry()) {
-                return 2;
+                return 4; // L'utilisateur à trop d'essais
             }
             $passVerif = $sqlRow["pass"];
             $userId = $sqlRow["id"];
             $ip_access = json_decode($sqlRow["ip_access"]);
         }
-        if (array_search($_SERVER["REMOTE_ADDR"], $ip_access) !== false) {
-            return 3;
+        if (! isset($userId)) {
+            return 2; // L'utilisateur n'existe pas
         }
-        if (! isset($passVerif)) {
-            mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `try` = `try` + 1 WHERE `" . $this->getConfigSqlTableUser() . "`.`user_norm` LIKE " . $user_norm . ";");
-            if (mysqli_errno($this->sqlConnect)) {
-                throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
-            }
-            return 1;
+        if (array_search($_SERVER["REMOTE_ADDR"], $ip_access) !== false) {
+            return 3; // L'ip n'est pas permit de se connecter
         }
         $hash = new Hash;
         if ($hash->hashVerif($pass, $passVerif)) {
@@ -194,25 +205,37 @@ class Account extends Config
             if (mysqli_errno($this->sqlConnect)) {
                 throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
             }
-            return 0;
+            return 0; // L'utilisateur est connecté
         }
-        return 1;
+        mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser() . "` SET `try` = `try` + 1 WHERE `" . $this->getConfigSqlTableUser() . "`.`user_norm` LIKE " . $user_norm . ";");
+        if (mysqli_errno($this->sqlConnect)) {
+            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        }
+        return 1; // Le mot de passe est faux
     }
 
     /**
-     *
+     * Réinitialise le compteur d'essais
+     * 
+     * @param  String $user
+     * 
+     * @throws Exception
+     * @return Void
      */
     public function accountUnblock($user)
     {
         mysqli_query($this->sqlConnect, "UPDATE `" . $this->getConfigSqlTableUser . "` SET `try` = '0' WHERE `user` = " . $user);
+        if (mysqli_errno($this->sqlConnect)) {
+            throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
+        }
     }
 
     /**
-     * Permet déconnexion de l'utilisateur
-     * Retourne toujours true si la requête SQL ne possède pas de problème
+     * Permet la déconnexion de l'utilisateur
+     * Retourne rien si la requête SQL ne possède pas de problème
      *
      * @throws Exception
-     * @return boolean
+     * @return Void
      */
     public function accountDisconnect()
     {
@@ -222,20 +245,19 @@ class Account extends Config
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
         session_regenerate_id();
-        return true;
     }
 
     /**
-     * Permet de modifier les informations de l'utilisateur qui est connecté
-     * Retourne false si la modification du nom d'utilisateur existe déjà
+     * Permet de modifier les informations d'un utilisateur
+     * Retourne false si l'utilisateur n'existe pas
      * Retourne true si les modifications sont bien enregistrées
      *
-     * @param string $user
-     * @param string $email
-     * @param array  $perso
+     * @param String      $user
+     * @param Null|String $email
+     * @param Array       $perso
      *
      * @throws Exception
-     * @return boolean
+     * @return Boolean
      */
     public function accountMod($user, $email = null, $perso = [])
     {
@@ -265,14 +287,14 @@ class Account extends Config
     }
 
     /**
-     * Permet de modifier le mot de passe de l'utilisateur connecté
-     * Retourne false si l'utilisateur n'est pas connecté
-     * Retourne true si le mot de passe est bien enregistré
+     * Permet de modifier le mot de passe d'un utilisateur
+     * Retourne false si l'utilisateur n'existe pas
+     * Retourne true si le mot de passe à bien été enregistré
      *
-     * @param string $mdp
+     * @param String $mdp
      *
      * @throws Exception
-     * @return boolean
+     * @return Boolean
      */
     public function accountModMdp($user, $mdp)
     {
@@ -294,11 +316,11 @@ class Account extends Config
      * Retourne false si le niveau de permission n'est pas attribué.
      * Retourne true si le niveau de permission est assigné.
      *
-     * @param string  $user
-     * @param integer $permission
+     * @param String  $user
+     * @param Integer $permission
      *
      * @throws Exception
-     * @return boolean
+     * @return Boolean
      */
     public function accountUpdatePerm($user, $permission)
     {
@@ -322,7 +344,7 @@ class Account extends Config
      * Permet de renvoyer un tableau des informations de l'utilisateur connecté
      *
      * @throws Exception
-     * @return boolean[]|mixed[]
+     * @return Boolean[]|Mixed[]
      */
     public function accountVerif()
     {
@@ -359,30 +381,34 @@ class Account extends Config
      * pas suffisament de permission
      * Retourne true si l'utilisateur possède suffisament de permission
      *
-     * @param integer $minPerm
+     * @param Integer $minPerm
      *
-     * @return boolean
+     * @return Boolean
      */
     public function accountVerifPerm($minPerm)
     {
         $verif = $this->accountVerif();
-        if ($verif["connect"] != true) {
-            return false;
-        } elseif ($verif["permission"] >= $minPerm) {
+        if ($verif["connect"] == true and $verif["permission"] >= $minPerm) {
             return true;
         }
         return false;
     }
 
     /**
+     * Permet de retourner une valeur boolean selon la permission de
+     * l'utilisateur
+     * Retourne false si l'utilisateur n'est pas connecté ou si il possède
+     * trop de permission
+     * Retourne true si l'utilisateur possède suffisament peu de permission
      *
+     * @param Interger $maxPerm
+     *
+     * @return Boolean
      */
     public function accountVerifPermReverse($maxPerm)
     {
         $verif = $this->accountVerif();
-        if ($verif["connect"] != true) {
-            return false;
-        } elseif ($verif["permission"] <= $maxPerm) {
+        if ($verif["connect"] == true and $verif["permission"] <= $minPerm) {
             return true;
         }
         return false;
@@ -390,10 +416,10 @@ class Account extends Config
 
     /**
      * Permet la suppression des sessions expirées dans la base de données
-     * Retourne toujours true si la requête SQL est correctement executée
+     * Retourne rien si la requête SQL est correctement executée
      *
      * @throws Exception
-     * @return boolean
+     * @return Void
      */
     public function accountClearSession()
     {
@@ -401,18 +427,17 @@ class Account extends Config
         if (mysqli_errno($this->sqlConnect)) {
             throw new Exception("Echec requête SQL : " . mysqli_errno($this->sqlConnect) . " : " . mysqli_error($this->sqlConnect));
         }
-        return true;
     }
 
     /**
      * Permet la création d'un jeton pour la récupération d'un compte
-     * d'utilisateur
+     * utilisateur
      *
-     * @param string $email
-     * @param string $user
+     * @param String $email
+     * @param String $user
      *
      * @throws Exception
-     * @return string|NULL
+     * @return String|Null
      */
     public function accountRecoveryCreate($email, $user)
     {
@@ -443,12 +468,12 @@ class Account extends Config
     }
 
     /**
-     * Permet la confirmation du propriétaire du compte d'utilisateur
+     * Permet la confirmation du propriétaire du compte d'utilisateur pour la récupération du compte utilisateur
      *
-     * @param string $token
+     * @param String $token
      *
      * @throws Exception
-     * @return string|NULL
+     * @return String|NULL
      */
     public function accountRecoveryUse($token)
     {
@@ -470,7 +495,14 @@ class Account extends Config
     }
 
     /**
+     * Permet de réinitialiser le timestamp avant une nouvelle demande de récupération du compte utilisateur
+     * Retourne true le timestamp est bien réinitialisé
+     * Retourne false si l'utilisateur n'existe pas
      *
+     * @param String $user
+     * 
+     * @throws Exception
+     * @return Boolean
      */
     public function accountRecoveryReset($user)
     {
