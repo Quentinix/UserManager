@@ -147,6 +147,7 @@ class Account extends Config
     /**
      * Permet la connexion de l'utilisateur
      * Retourne 0 si l'utilisateur est bien connecté
+     * Retourne 1 si le mot de passe est faux
      * Retourne 2 si l'utilisateur n'existe pas
      * Retourne 3 si l'ip de l'utilisateur n'est pas permit
      * Retourne 4 si l'utilisateur à trop d'essais
