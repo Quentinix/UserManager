@@ -1,9 +1,15 @@
 Wave
 ====
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/124dfab578544851bdef8c05fe0a6bc8)](https://www.codacy.com/app/Quentinix/Wave?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/Wave&utm_campaign=badger)
-[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/802287394f6048669bb07ad3c294e13b)](https://www.codacy.com/app/Quentinix/Wave?utm_source=github.com&utm_medium=referral&utm_content=Quentinix/Wave&utm_campaign=Badge_Coverage)
+Branche master :
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/124dfab578544851bdef8c05fe0a6bc8)](https://www.codacy.com/app/Quentinix/Wave)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/802287394f6048669bb07ad3c294e13b)](https://www.codacy.com/app/Quentinix/Wave)
 [![Build Status](https://travis-ci.org/Quentinix/Wave.svg?branch=master)](https://travis-ci.org/Quentinix/Wave)
+
+Branche dev :
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/124dfab578544851bdef8c05fe0a6bc8?branch=dev)](https://www.codacy.com/app/Quentinix/Wave)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/802287394f6048669bb07ad3c294e13b?branch=dev)](https://www.codacy.com/app/Quentinix/Wave)
+[![Build Status](https://travis-ci.org/Quentinix/Wave.svg?branch=dev)](https://travis-ci.org/Quentinix/Wave)
 
 Gestionnaire d'utilisateurs utilisable pour les sites web
 ---------------------------------------------------------
