@@ -95,7 +95,7 @@ class Account extends Config
 
     /**
      * Retourne la liste des utilisateurs
-     * 
+     *
      * @throws Exception
      * @return Array
      */
@@ -116,9 +116,9 @@ class Account extends Config
      * Retourne le détail de l'utilisateur mis en paramètre
      * Si l'utilisateur n'existe pas, alors Null est retourné
      * Si l'utilisateur existe, alors un tableau avec le détail de l'utilisateur est retourné
-     * 
+     *
      * @param  String $user
-     * 
+     *
      * @throws Exception
      * @return Null|Array
      */
@@ -217,9 +217,9 @@ class Account extends Config
 
     /**
      * Réinitialise le compteur d'essais
-     * 
+     *
      * @param  String $user
-     * 
+     *
      * @throws Exception
      * @return Void
      */
@@ -501,7 +501,7 @@ class Account extends Config
      * Retourne false si l'utilisateur n'existe pas
      *
      * @param String $user
-     * 
+     *
      * @throws Exception
      * @return Boolean
      */
