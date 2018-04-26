@@ -71,7 +71,7 @@ class Permission extends Config
     }
 
     /**
-     * Permet de retourné le label selon le niveau de permission
+     * Permet de retourner le label selon le niveau de permission
      *
      * @param integer $level
      *

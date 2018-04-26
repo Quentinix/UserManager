@@ -16,7 +16,7 @@ class Sql extends Config
     private $sqlConnect;
 
     /**
-     * Connexion à la base de données lors de l'appel de la class
+     * Connexion à la base de données lors de l'appel de la classe
      */
     public function __construct()
     {
@@ -31,6 +31,8 @@ class Sql extends Config
 
     /**
      * Appel de la connexion SQL
+     *
+     * @return mysql
      */
     public function getSqlConnect()
     {
